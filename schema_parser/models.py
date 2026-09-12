@@ -1,7 +1,10 @@
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Generic, TypeVar
+
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from enum import StrEnum
 
 type YAMLScalar = str | bool | int | float
+IntOrFloat = TypeVar("IntOrFloat", int, float)
 
 
 class SchemaModel(BaseModel):
@@ -38,6 +41,17 @@ class SupportedOS(StrEnum):
     tvOS = "tvOS"
     visionOS = "visionOS"
     watchOS = "watchOS"
+
+
+class Range(SchemaModel, Generic[IntOrFloat]):
+    min: IntOrFloat | None = None
+    max: IntOrFloat | None = None
+
+    @model_validator(mode="after")
+    def validate_range(self):
+        if self.min is not None and self.max is not None and self.min > self.max:
+            raise ValueError("min must be less than or equal to max")
+        return self
 
 
 class SharedIpad(SchemaModel):
@@ -88,10 +102,10 @@ class PayloadKey(SchemaModel):
     supportedOS: dict[SupportedOS, PlatformKeys] | None = None
     type: TypeKind
     subtype: str | None = None  # Deprecated
-    valuetype: str | None = None
+    valuetype: str | None = None  # Only for strings
     presence: Presence = Presence.OPTIONAL
     rangelist: list[YAMLScalar] | None = None
-    range: object | None = None  # TODO: Create object
+    range: Range[int] | Range[float] | None = None  # TODO: Create object
     default: YAMLScalar | None = None
     format: str | None = None
     repetition: object | None = None  # TODO: Create object
