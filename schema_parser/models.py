@@ -1,10 +1,11 @@
-from dataclasses import dataclass, field
 from pydantic import BaseModel, ConfigDict, Field
 from enum import StrEnum
 
+type YAMLScalar = str | bool | int | float
+
 
 class SchemaModel(BaseModel):
-    model_config = ConfigDict(extra="allow", populate_by_name=True)
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
 
 
 class TypeKind(StrEnum):
@@ -60,7 +61,7 @@ class PlatformKeys(SchemaModel):
     devicechannel: bool | None = None
     userchannel: bool | None = None
     supervised: bool | None = None
-    requires_dep: bool | None = None
+    requiresdep: bool | None = None
     userapprovedmdm: bool | None = None
     allowmanualinstall: bool | None = None
     sharedipad: SharedIpad | None = None
@@ -83,11 +84,21 @@ class ProfilePayload(SchemaModel):
 
 class PayloadKey(SchemaModel):
     key: str
-    value_type: TypeKind = Field(alias="type")
-    content: str | None
-    presence: Presence
-    # default: str | int | bool | float | None
+    title: str | None = None
     supportedOS: dict[SupportedOS, PlatformKeys] | None = None
+    type: TypeKind
+    subtype: str | None = None  # Deprecated
+    valuetype: str | None = None
+    presence: Presence = Presence.OPTIONAL
+    rangelist: list[YAMLScalar] | None = None
+    range: object | None = None  # TODO: Create object
+    default: YAMLScalar | None = None
+    format: str | None = None
+    repetition: object | None = None  # TODO: Create object
+    combinetype: str | None = None
+    content: str | None = None
+    subkeytype: str | None = None
+    subkeys: list[PayloadKey] | None = None
 
 
 class SchemaDocument(SchemaModel):
@@ -95,3 +106,4 @@ class SchemaDocument(SchemaModel):
     description: str | None
     payload: ProfilePayload
     payloadkeys: list[PayloadKey] = Field(default_factory=list)
+    notes: object | None = None
