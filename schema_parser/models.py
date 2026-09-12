@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from enum import StrEnum
 
 type YAMLScalar = str | bool | int | float
+type NumericRange = Range[int] | Range[float]
 IntOrFloat = TypeVar("IntOrFloat", int, float)
 
 
@@ -105,10 +106,10 @@ class PayloadKey(SchemaModel):
     valuetype: str | None = None  # Only for strings
     presence: Presence = Presence.OPTIONAL
     rangelist: list[YAMLScalar] | None = None
-    range: Range[int] | Range[float] | None = None  # TODO: Create object
+    range: NumericRange | None = None  # TODO: Create object
     default: YAMLScalar | None = None
     format: str | None = None
-    repetition: object | None = None  # TODO: Create object
+    repetition: NumericRange | None = None  # TODO: Create object
     combinetype: str | None = None
     content: str | None = None
     subkeytype: str | None = None
