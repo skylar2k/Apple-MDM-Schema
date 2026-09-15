@@ -30,7 +30,6 @@ def python_type_for_key(key: PayloadKey) -> Any:
             return float
 
         case TypeKind.ARRAY:
-            ...
             # if key.subkeys:
             #    item_model = model_from_payload_keys(
             #        key.subkeys,
@@ -94,11 +93,14 @@ def model_from_payload_keys(
     )
 
 
-# class ProfileModel(BaseModel):
-#    model_config = ConfigDict(title="mdm://profile")
+def model_common_payload_keys(payload: SchemaDocument): ...
 
 
-# class ProfileJsonSchema(ProfileModel):
+def model_toplevel(toplevel: SchemaDocument, payloads: list[SchemaDocument]):
+    toplevel_keys = model_from_payload_keys(
+        toplevel.payloadkeys,
+        payload_type=toplevel.payload.payloadtype,
+        model_name="Schema",
+    )
 
-
-# def build_schema(data: dict[str, SchemaDocument]):
+    print(toplevel_keys)
