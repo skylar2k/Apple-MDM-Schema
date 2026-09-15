@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 
+import json
 import pathlib
-import pprint
-from schema_parser import parse_schema, SchemaDocument
+from devtools import pprint
+from schema_parser import (
+    parse_schema,
+    SchemaDocument,
+    # ProfileJsonSchema,
+    model_from_payload_keys,
+)
 
 APPLE_SCHEMA_PATH: pathlib.Path = pathlib.Path("./mdm/profiles/")
 
@@ -14,7 +20,20 @@ def main():
             profile = parse_schema(f.read())
             profiles[profile.payload.payloadtype] = profile
 
-    pprint.pprint(profiles)
+    # json_schema = ProfileJsonSchema(test={})
+    # print(json.dumps(json_schema.model_json_schema()))
+    # print(json.dumps(profiles["CommonPayloadKeys"].model_json_schema(), indent=2))
+    # pprint(profiles["CommonPayloadKeys"])
+    print(
+        json.dumps(
+            model_from_payload_keys(
+                profiles["TopLevel"].payloadkeys,
+                payload_type=profiles["TopLevel"].payload.payloadtype,
+                model_name="TopLevel",
+            ).model_json_schema(),
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

@@ -106,10 +106,10 @@ class PayloadKey(SchemaModel):
     valuetype: str | None = None  # Only for strings
     presence: Presence = Presence.OPTIONAL
     rangelist: list[YAMLScalar] | None = None
-    range: NumericRange | None = None  # TODO: Create object
+    range: NumericRange | None = None
     default: YAMLScalar | None = None
     format: str | None = None
-    repetition: NumericRange | None = None  # TODO: Create object
+    repetition: NumericRange | None = None
     combinetype: str | None = None
     content: str | None = None
     subkeytype: str | None = None
@@ -117,8 +117,10 @@ class PayloadKey(SchemaModel):
 
 
 class SchemaDocument(SchemaModel):
-    title: str
-    description: str | None
-    payload: ProfilePayload
-    payloadkeys: list[PayloadKey] = Field(default_factory=list)
+    title: str  # Title for this schema object
+    description: str | None  # Description of this schema object
+    payload: ProfilePayload  # Information about the object as a whole
+    payloadkeys: list[
+        PayloadKey
+    ]  # A list of YAML objects representing the command request
     notes: object | None = None
