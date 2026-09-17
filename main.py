@@ -3,17 +3,16 @@
 import json
 import pathlib
 from devtools import pprint
+from pydantic import BaseModel, ConfigDict, Field, create_model
 from schema_parser import (
     parse_schema,
     SchemaDocument,
     # ProfileJsonSchema,
     model_from_payload_keys,
 )
+from schema_parser.json_schema import make_configuration_profile, make_payload_union
 
 APPLE_SCHEMA_PATH: pathlib.Path = pathlib.Path("./mdm/profiles/")
-
-
-def model_top_level(): ...
 
 
 def main():
@@ -21,33 +20,46 @@ def main():
     for file in APPLE_SCHEMA_PATH.rglob("*.yaml"):
         with open(file) as f:
             profile = parse_schema(f.read())
+            if profile.payload.payloadtype in [
+                "TopLevel",
+                "CommonPayloadKeys",
+                ".GlobalPreferences",
+            ]:
+                continue
             profiles[profile.payload.payloadtype] = profile
+    # pprint(profiles)
 
-    # json_schema = ProfileJsonSchema(test={})
-    # print(json.dumps(json_schema.model_json_schema()))
-    # print(json.dumps(profiles["CommonPayloadKeys"].model_json_schema(), indent=2))
-    # pprint(profiles["CommonPayloadKeys"])
+    payload_registry: dict[str, type[BaseModel]] = {}
+
     for profile in profiles:
         if profile in ["TopLevel", "CommonPayloadKeys", ".GlobalPreferences"]:
             continue
 
         schema = profiles[profile]
         payload_keys = model_from_payload_keys(
-            schema.payloadkeys, payload_type=profile, model_name=profile
+            schema.payloadkeys,
+            payload_type=profile,
+            model_name=schema.title,
         )
-        print(profile)
-        print(json.dumps(payload_keys.model_json_schema(), indent=2))
+        # pprint(payload_keys)
+        payload_registry[profile] = payload_keys
+    # for payload_type, model in payload_registry.items():
+    #    print(payload_type, model.__name__)
+    #    print(list(model.model_fields))
 
-    # print(
-    #    json.dumps(
-    #        model_from_payload_keys(
-    #            profiles["TopLevel"].payloadkeys,
-    #            payload_type=profiles["TopLevel"].payload.payloadtype,
-    #            model_name="TopLevel",
-    #        ).model_json_schema(),
-    #        indent=2,
-    #    )
+    test = make_configuration_profile(payload_registry)
+    # pprint(test)
+    # test = create_model(
+    #    "ConfigurationProfile",
+    #    __config__=ConfigDict(extra="forbid", populate_by_name=True),
+    #    test=test,
     # )
+    # pprint(test.model_json_schema(True, ref_template="#/$defs/{model}"))
+    with open("test.schema.json", "w") as f:
+        json.dump(
+            test.model_json_schema(True, ref_template="#/$defs/{model}"), f, indent=2
+        )
+    pprint(test.model_json_schema(True, ref_template="#/$defs/{model}"))
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
-from typing import Any, Literal
+from typing import Annotated, Any, Literal, Union
 
+from devtools import pprint
 from pydantic import BaseModel, WithJsonSchema, create_model
 from pydantic.config import JsonDict
 from pydantic_core.core_schema import JsonSchema
@@ -7,7 +8,12 @@ from pydantic_core.core_schema import JsonSchema
 from .models import *
 
 
-ModelT = TypeVar("ModelT", bound=BaseModel)
+class CommonPayload(BaseModel):
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+    PayloadIdentifier: str = Field(alias="PayloadIdentifier")
+    PayloadUUID: str = Field(alias="PayloadUUID")
+    PayloadVersion: int = Field(alias="PayloadVersion")
+
 
 TYPE_FORMAT: dict[TypeKind, dict[str, str]] = {
     TypeKind.DATE: {"format": "date-time"},
@@ -71,7 +77,6 @@ def model_from_payload_keys(
                 default=payload_key.default,
                 alias=payload_key.key,
                 description=payload_key.content,
-                title=payload_key.key,
                 json_schema_extra=JsonDict(type_format),
             ),
         )
@@ -82,25 +87,48 @@ def model_from_payload_keys(
         Field(
             default=payload_type,
             alias="PayloadType",
-            description="The payload type.",
-            title=payload_type,
         ),
     )
     return create_model(
         model_name,
-        __config__=ConfigDict(extra="forbid", populate_by_name=True),
+        __base__=CommonPayload,
         **fields,
     )
 
 
-def model_common_payload_keys(payload: SchemaDocument): ...
+def make_payload_union(payloads: dict[str, type[BaseModel]]):
+    models = tuple(payloads.values())
+
+    if not models:
+        raise ValueError("No payload models found")
+
+    return Annotated[Union[models], Field(discriminator="PayloadType")]
 
 
-def model_toplevel(toplevel: SchemaDocument, payloads: list[SchemaDocument]):
-    toplevel_keys = model_from_payload_keys(
-        toplevel.payloadkeys,
-        payload_type=toplevel.payload.payloadtype,
-        model_name="Schema",
+def make_configuration_profile(payloads: dict[str, type[BaseModel]]):
+    payload_union = make_payload_union(payloads)
+    # pprint(payload_union)
+
+    return create_model(
+        "ConfigurationProfile",
+        __config__=ConfigDict(
+            extra="forbid",
+            populate_by_name=True,
+        ),
+        __module__="apple_mdm.generated",
+        PayloadDisplayName=(
+            str | None,
+            Field(default=None, alias="PayloadDisplayName"),
+        ),
+        PayloadIdentifier=(str, Field(alias="PayloadIdentifier")),
+        PayloadUUID=(str, Field(alias="PayloadIdentifier")),
+        PayloadVersion=(int, Field(alias="PayloadVersion")),
+        PayloadType=(
+            Literal["Configuration"],
+            Field(
+                default="Configuration",
+                alias="PayloadType",
+            ),
+        ),
+        PayloadContent=(list[payload_union], Field(alias="PayloadContent")),
     )
-
-    print(toplevel_keys)

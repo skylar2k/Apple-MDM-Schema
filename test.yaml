@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=./test.schema.json
+PayloadIdentifier: test
+PayloadVersion: 0
+PayloadContent:
+  - PayloadType: com.apple.relay.managed
+    AllowDNSFailover:
