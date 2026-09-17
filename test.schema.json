@@ -286,7 +286,7 @@
         },
         "HardwareBound": {
           "default": null,
-          "description": "If `false`, the private key isn't bound to the device.\n\nIf `true`, the private key is bound to the device. The Secure Enclave generates the key pair, and the private key is cryptographically entangled with a system key. This prevents the system from exporting the private key.\n\nIf `true`, `KeyType` must be `ECSECPrimeRandom` and `KeySize` must be 256 or 384.\n\nSetting this key to `true` is supported as of macOS 14 on Apple Silicon and Intel devices that have a T2 chip. Older macOS versions or other Mac devices require this key but it must have a value of `false`.",
+          "description": "If `false`, the private key isn't bound to the device.\n\nIf `true`, the private key is bound to the device. The Secure Enclave generates the key pair, and the private key is cryptographically entangled with a system key. This prevents the system from exporting the private key.\n\nIf `true`, `KeyType` must be `ECSECPrimeRandom` and `KeySize` must be 256 or 384.\n\nmacOS 14 on Apple silicon and Intel devices that have a T2 chip support setting this key to `true`. Older macOS versions or other Mac devices require this key but it must have a value of `false`.",
           "title": "Hardwarebound",
           "type": "boolean"
         },
@@ -319,13 +319,13 @@
         },
         "Attest": {
           "default": false,
-          "description": "If `true`, the device provides attestations that describe the device and the generated key to the ACME server. The server can use the attestations as strong evidence that the key is bound to the device, and that the device has properties listed in the attestation. The server can use that as part of a trust score to decide whether to issue the requested certificate.\n\nWhen `Attest` is `true`, `HardwareBound` also needs to be `true`.\n\nSetting this key to `true` is supported as of macOS 14. Older macOS versions require this key but it must have a value of `false`. See below for hardware requirements.",
+          "description": "If `true`, the device provides attestations that describe the device and the generated key to the ACME server. The server can use the attestations as strong evidence that the key is bound to the device, and that the device has properties listed in the attestation. The server can use that as part of a trust score to decide whether to issue the requested certificate.\n\nWhen `Attest` is `true`, `HardwareBound` also needs to be `true`.\n\nmacOS 14 supports setting this key to `true`. Older macOS versions require this key but it must have a value of `false`. See below for hardware requirements.",
           "title": "Attest",
           "type": "boolean"
         },
         "KeyIsExtractable": {
           "default": true,
-          "description": "If `true`, the private key of the identity obtained through Automated Certificate Management Environment (ACME) needs to be tagged as \"non-extractable\" in the keychain.",
+          "description": "If `false`, the device tags the private key of the identity obtained through Automated Certificate Management Environment (ACME) as \"non-extractable\" in the keychain.",
           "title": "Keyisextractable",
           "type": "boolean"
         },
@@ -656,7 +656,7 @@
         },
         "CertTemplate": {
           "default": null,
-          "description": "The certificate template for your environment. The default user certificate value is \\`User\\`. The default computer certificate value is \\`Machine\\`.",
+          "description": "The certificate template for your environment. The default user certificate value is `User`. The default computer certificate value is `Machine`.",
           "title": "Certtemplate",
           "type": "string"
         },
@@ -674,43 +674,43 @@
         },
         "CertificateAuthority": {
           "default": null,
-          "description": "The name of the certificate authority (CA), which is determined from the common name (CN) of the Active Directory entry. Available in macOS 10.8 and later. Valid values:\n\n- CN=<your CA Name>\n- CN=`Certification Authorities`\n- CN=`Public Key Services`\n- CN=`Services`\n- CN=`Configuration`\n- CN=<your base Domain Name>",
+          "description": "The name of the certificate authority (CA), which the device determines from the common name (CN) of the Active Directory entry. Valid values:\n\n- CN=<your CA Name>\n- CN=`Certification Authorities`\n- CN=`Public Key Services`\n- CN=`Services`\n- CN=`Configuration`\n- CN=<your base Domain Name>",
           "title": "Certificateauthority",
           "type": "string"
         },
         "CertificateAcquisitionMechanism": {
           "default": null,
-          "description": "This value is most commonly `RPC`; if using web enrollment, use `HTTP`. Available in macOS 10.8 and later.",
+          "description": "This value is most commonly `RPC`; if using web enrollment, use `HTTP`.",
           "title": "Certificateacquisitionmechanism",
           "type": "string"
         },
         "AllowAllAppsAccess": {
           "default": false,
-          "description": "If `true`, gives apps access to the private key. Available in macOS 10.10 and later.",
+          "description": "If `true`, gives apps access to the private key.",
           "title": "Allowallappsaccess",
           "type": "boolean"
         },
         "PromptForCredentials": {
           "default": false,
-          "description": "If `true`, the system prompts the user for credentials when is installs the profile. This key applies only to user certificates with the Manual Download profile delivery method. Omit this key for computer certificates. Available in macOS 10.8 and later.",
+          "description": "If `true`, the system prompts the user for credentials when is installs the profile. This key applies only to user certificates with the Manual Download profile delivery method. Omit this key for computer certificates.",
           "title": "Promptforcredentials",
           "type": "boolean"
         },
         "KeyIsExtractable": {
           "default": false,
-          "description": "If `true`, the system allows exporting the private key. Available in macOS 10.10 and later.",
+          "description": "If `true`, the system allows exporting the private key.",
           "title": "Keyisextractable",
           "type": "boolean"
         },
         "Keysize": {
           "default": 2048,
-          "description": "The RSA key size for the certificate signing request (CSR). Available in macOS 10.11 and later.",
+          "description": "The RSA key size for the certificate signing request (CSR).",
           "title": "Keysize",
           "type": "integer"
         },
         "EnableAutoRenewal": {
           "default": false,
-          "description": "If `true`, the certificate obtained with this payload attempts auto-renewal. Auto-renewal can only be used with device Active Directory certificate payloads. Available in macOS 10.13.4 and later.",
+          "description": "If `true`, the certificate obtained with this payload attempts auto-renewal. Auto-renewal can only be used with device Active Directory certificate payloads.",
           "title": "Enableautorenewal",
           "type": "boolean"
         },
@@ -797,7 +797,7 @@
         },
         "SecurityType": {
           "default": null,
-          "description": "The security policy for AirPlay. Allowed values:\n\n- `PASSCODE_ONCE`: Requires an onscreen passcode on first connection from a device. Subsequent connections from the same device aren't prompted.\n- `PASSCODE_ALWAYS`: Requires an onscreen passcode for every AirPlay connection. After an AirPlay connection ends, the system allows reconnecting within 30 seconds without a password.\n- `PASSWORD`: Requires the passphrase set for `Password`.\n\n> Note:\n> `NONE` was deprecated in tvOS 11.3. Existing profiles that use `NONE` get the `PASSWORD_ONCE` behavior.",
+          "description": "The security policy for AirPlay. Allowed values:\n\n* `PASSCODE_ONCE`: Requires an onscreen passcode on first connection from a device. Subsequent connections from the same device aren't prompted.\n* `PASSCODE_ALWAYS`: Requires an onscreen passcode for every AirPlay connection. After an AirPlay connection ends, the system allows reconnecting within 30 seconds without a password.\n* `PASSWORD`: Requires the passphrase set for `Password`.\n\n> Note:\n> `NONE` was deprecated in tvOS 11.3. Existing profiles that use `NONE` get the `PASSWORD_ONCE` behavior.",
           "title": "Securitytype",
           "type": "string"
         },
@@ -922,14 +922,14 @@
         },
         "AssociatedDomains": {
           "default": null,
-          "description": "An array with entries that must each specify a domain that triggers this VPN. The domains must also be part of the `apple-app-site-association` file, as described in `Supporting associated domains`.\n\nAvailable in iOS 14 and later, and macOS 11 and later.",
+          "description": "An array with entries that must each specify a domain that triggers this VPN. The domains must also be part of the `apple-app-site-association` file, as described in `Supporting associated domains`.",
           "items": {},
           "title": "Associateddomains",
           "type": "array"
         },
         "ExcludedDomains": {
           "default": null,
-          "description": "An array with entries that each specify a domain that doesn't trigger this VPN for connections to the domain.\n\nAvailable in iOS 14 and later, and macOS 11 and later.",
+          "description": "An array with entries that each specify a domain that doesn't trigger this VPN for connections to the domain.",
           "items": {},
           "title": "Excludeddomains",
           "type": "array"
@@ -942,7 +942,7 @@
         },
         "SMBDomains": {
           "default": null,
-          "description": "An array of SMB domains that's accessible through this VPN connection.\n\nAvailable in iOS 13 and later.",
+          "description": "An array of SMB domains that's accessible through this VPN connection.",
           "items": {},
           "title": "Smbdomains",
           "type": "array"
@@ -1059,19 +1059,19 @@
         },
         "restrict-store-softwareupdate-only": {
           "default": false,
-          "description": "If `true`, the system prevents App Store from launching. Available in macOS 10.14 and later. Restricts installations to software updates only in macOS 10.10 through 10.13.",
+          "description": "If `true`, the system prevents App Store from launching. Restricts installations to software updates only in macOS 10.10 through 10.13.",
           "title": "Restrict-Store-Softwareupdate-Only",
           "type": "boolean"
         },
         "restrict-store-disable-app-adoption": {
           "default": false,
-          "description": "If `true`, the system disables app adoption by users. Available in macOS 10.10 and later.",
+          "description": "If `true`, the system disables app adoption by users.",
           "title": "Restrict-Store-Disable-App-Adoption",
           "type": "boolean"
         },
         "DisableSoftwareUpdateNotifications": {
           "default": false,
-          "description": "If `true`, the system disables software update notifications. Available in macOS 10.10 and later.",
+          "description": "If `true`, the system disables software update notifications.",
           "title": "Disablesoftwareupdatenotifications",
           "type": "boolean"
         },
@@ -1223,7 +1223,7 @@
         },
         "VPNUUID": {
           "default": null,
-          "description": "The VPNUUID of the per-app VPN the account uses for network communication. Available in iOS 14 and later.",
+          "description": "The VPNUUID of the per-app VPN the account uses for network communication.",
           "title": "Vpnuuid",
           "type": "string"
         },
@@ -1308,7 +1308,7 @@
         },
         "VPNUUID": {
           "default": null,
-          "description": "The VPNUUID of the per-app VPN the account uses for network communication. Available in iOS 14 and later.",
+          "description": "The VPNUUID of the per-app VPN the account uses for network communication.",
           "title": "Vpnuuid",
           "type": "string"
         },
@@ -1540,7 +1540,7 @@
         },
         "DisabledForCerts": {
           "default": null,
-          "description": "An array of certificates for which certificate transparency is disabled. One of the following conditions needs to be met to disable certificate transparency enforcement when this policy is set:\n\n- The hash is of the server certificate's `subjectPublicKeyInfo`.\n- The hash is of a `subjectPublicKeyInfo` that appears in a CA certificate in the certificate chain; the CA certificate is constrained through the X.509v3 `nameConstraints` extension. One or more `directoryName` `nameConstraints` are present in the `permittedSubtrees`, and the `directoryName` contains an `organizationName` attribute.\n- The hash is of a `subjectPublicKeyInfo` that appears in a CA certificate in the certificate chain. The CA certificate has one or more `organizationName` attributes in the certificate `Subject`, and the server's certificate contains the same number of `organizationName` attributes, in the same order, and with byte-for-byte identical values.",
+          "description": "An array of certificates for which certificate transparency is disabled. One of the following conditions needs to be met to disable certificate transparency enforcement when this policy is set:\n\n- The hash is of the server certificate's `subjectPublicKeyInfo`.\n- The hash is of a `subjectPublicKeyInfo` that appears in a CA certificate in the certificate chain; the X.509v3 `nameConstraints` extension constrains the CA certificate. One or more `directoryName` `nameConstraints` are present in the `permittedSubtrees`, and the `directoryName` contains an `organizationName` attribute.\n- The hash is of a `subjectPublicKeyInfo` that appears in a CA certificate in the certificate chain. The CA certificate has one or more `organizationName` attributes in the certificate `Subject`, and the server's certificate contains the same number of `organizationName` attributes, in the same order, and with byte-for-byte identical values.",
           "items": {},
           "title": "Disabledforcerts",
           "type": "array"
@@ -1644,7 +1644,7 @@
         },
         "AllowAllAppsAccess": {
           "default": false,
-          "description": "If `true`, the system allows apps access to the private key. Available in macOS 10.10 and later.",
+          "description": "If `true`, the system allows apps access to the private key.",
           "title": "Allowallappsaccess",
           "type": "boolean"
         },
@@ -1789,7 +1789,7 @@
       "title": "Conference Room Display",
       "type": "object"
     },
-    "Content_Caching": {
+    "Content_Caching_Service": {
       "additionalProperties": false,
       "properties": {
         "PayloadIdentifier": {
@@ -1806,7 +1806,7 @@
         },
         "AllowCacheDelete": {
           "default": true,
-          "description": "If true, the system purges content from the cache automatically when it needs disk space for other apps when free disk space runs low on the computer. Set to `false` to maximize effectiveness of Content Caching. Available in macOS 10.15 and later.",
+          "description": "If true, the system purges content from the cache automatically when it needs disk space for other apps when free disk space runs low on the computer. Set to `false` to maximize effectiveness of Content Caching.",
           "title": "Allowcachedelete",
           "type": "boolean"
         },
@@ -1830,7 +1830,7 @@
         },
         "AutoEnableTetheredCaching": {
           "default": false,
-          "description": "If `true`, the system automatically enables Internet connection sharing when possible and prevent disabling Internet connection sharing. `DenyTetheredCaching` overrides `AutoEnableTetheredCaching`. Tethered caching requires Content Caching.\n\nAvailable in macOS 10.15.4 and later.",
+          "description": "If `true`, the system automatically enables Internet connection sharing when possible and prevent disabling Internet connection sharing. `DenyTetheredCaching` overrides `AutoEnableTetheredCaching`. Tethered caching requires Content Caching.",
           "title": "Autoenabletetheredcaching",
           "type": "boolean"
         },
@@ -1854,13 +1854,13 @@
         },
         "DisplayAlerts": {
           "default": false,
-          "description": "If `true`, Content Caching displays exceptional conditions (alerts) as system notifications in the upper corner of the screen. Alerts were automatically displayed starting in macOS 10.13. In macOS 10.15 the alerts are off by default, but still available through this setting. Available in macOS 10.15 and later.",
+          "description": "If `true`, Content Caching displays exceptional conditions (alerts) as system notifications in the upper corner of the screen. The device automatically displayed alerts starting in macOS 10.13. In macOS 10.15 the alerts are off by default, but still available through this setting.",
           "title": "Displayalerts",
           "type": "boolean"
         },
         "KeepAwake": {
           "default": false,
-          "description": "If `true`, the system prevents the computer from sleeping as long as Content Caching is on (System Preferences > Sharing > Content Caching is on). Customers who want Content Caching to be as available as much as possible should turn this setting on. Available in macOS 10.15 and later.",
+          "description": "If `true`, the system prevents the computer from sleeping as long as Content Caching is on (System Preferences > Sharing > Content Caching is on). Customers who want Content Caching to be as available as much as possible should turn this setting on.",
           "title": "Keepawake",
           "type": "boolean"
         },
@@ -1904,7 +1904,7 @@
         },
         "ParentSelectionPolicy": {
           "default": "round-robin",
-          "description": "The policy to implement when choosing among more than one configured parent content cache. With every policy, the system skips parent caches that are temporarily unavailable. Allowed values:\n\n- `first-available`: Always use the first available parent in the Parents list. Use this policy to designate permanent primary, secondary, and subsequent parents.\n- `url-path-hash`: Hash the path part of the requested URL so that the same parent is always used for the same URL. This is useful for maximizing the size of the combined caches of     the parents.\n- `random`: Choose a parent at random. Use this policy for load balancing.\n- `round-robin`: Rotate through the parents in order. Use this policy for load balancing.\n- `sticky-available`: Use the first available parent in the Parents list until it becomes unavailable, then advance to the next one. Use this policy for designating floating primary, secondary, and subsequent parents.",
+          "description": "The policy to implement when choosing among more than one configured parent content cache. With every policy, the system skips parent caches that are temporarily unavailable. Allowed values:\n\n* `first-available`: Always use the first available parent in the Parents list. Use this policy to designate permanent primary, secondary, and subsequent parents.\n* `url-path-hash`: Hash the path part of the requested URL so that the same parent is always used for the same URL. This is useful for maximizing the size of the combined caches of     the parents.\n* `random`: Choose a parent at random. Use this policy for load balancing.\n* `round-robin`: Rotate through the parents in order. Use this policy for load balancing.\n* `sticky-available`: Use the first available parent in the Parents list until it becomes unavailable, then advance to the next one. Use this policy for designating floating primary, secondary, and subsequent parents.",
           "title": "Parentselectionpolicy",
           "type": "string"
         },
@@ -1953,7 +1953,7 @@
         "PayloadUUID",
         "PayloadVersion"
       ],
-      "title": "Content Caching",
+      "title": "Content Caching Service",
       "type": "object"
     },
     "DNS_Proxy": {
@@ -1981,6 +1981,12 @@
           "default": null,
           "description": "The bundle identifier of the DNS proxy network extension to use. Declaring the bundle identifier is useful for apps that contain more than one DNS proxy extension.",
           "title": "Providerbundleidentifier",
+          "type": "string"
+        },
+        "ProviderDesignatedRequirement": {
+          "default": null,
+          "description": "The designated requirement string that the system embeds in the code signature of the DNS proxy network extension. Use this to correctly identify the DNS proxy extension when `ProviderBundleIdentifier` is present.",
+          "title": "Providerdesignatedrequirement",
           "type": "string"
         },
         "ProviderConfiguration": {
@@ -2573,14 +2579,14 @@
         },
         "MCXDockSpecialFolders": {
           "default": null,
-          "description": "One or more special folders that may be created at user login time and placed in the Dock.\n\n\n\nThe \"My Applications\" item is only used for Simple Finder environments. The \"Original Network Home\" item is only used for mobile account users.",
+          "description": "One or more special folders that the device may create at user login time and place in the Dock.\n\n\n\nThe \"My Applications\" item is only used for Simple Finder environments. The \"Original Network Home\" item is only used for mobile account users.",
           "items": {},
           "title": "Mcxdockspecialfolders",
           "type": "array"
         },
         "AllowDockFixupOverride": {
           "default": false,
-          "description": "If `true`, use the file in `/Library/Preferences/com.apple.dockfixup.plist` when a new user or migrated user logs in. This option has no effect for existing users. Available in macOS 10.12 and later. Only available on the device channel.",
+          "description": "If `true`, use the file in `/Library/Preferences/com.apple.dockfixup.plist` when a new user or migrated user logs in. This option has no effect for existing users. Only available on the device channel.",
           "title": "Allowdockfixupoverride",
           "type": "boolean"
         },
@@ -2592,28 +2598,28 @@
         },
         "static-others": {
           "default": null,
-          "description": "An array of items located on the Documents side of the Dock and cannot be removed from that location.",
+          "description": "An array of items located on the Documents side of the Dock that users can't remove from that location.",
           "items": {},
           "title": "Static-Others",
           "type": "array"
         },
         "static-apps": {
           "default": null,
-          "description": "An array of items located on the Applications side of the Dock and cannot be removed from that location.",
+          "description": "An array of items located on the Applications side of the Dock that users can't remove from that location.",
           "items": {},
           "title": "Static-Apps",
           "type": "array"
         },
         "persistent-apps": {
           "default": null,
-          "description": "An array of items located on the Applications side of the Dock that can be removed from the Dock.",
+          "description": "An array of items located on the Applications side of the Dock that users can remove from the Dock.",
           "items": {},
           "title": "Persistent-Apps",
           "type": "array"
         },
         "persistent-others": {
           "default": null,
-          "description": "An array of items located on the Documents side of the Dock that can be removed from the Dock.",
+          "description": "An array of items located on the Documents side of the Dock that users can remove from the Dock.",
           "items": {},
           "title": "Persistent-Others",
           "type": "array"
@@ -2650,35 +2656,35 @@
         },
         "EmailDomains": {
           "default": null,
-          "description": "An array of domains. Mail marks in red all email addresses that lack a suffix matching any of these strings.\n\nAvailable in iOS 8 and later and macOS 10.10 and later.",
+          "description": "An array of domains. Mail marks in red all email addresses that lack a suffix matching any of these strings.",
           "items": {},
           "title": "Emaildomains",
           "type": "array"
         },
         "WebDomains": {
           "default": null,
-          "description": "An array of domains. The system considers URLs matching the patterns listed in this property managed.\n\nAvailable in iOS 9.3 and later.",
+          "description": "An array of domains. The system considers URLs matching the patterns listed in this property managed.",
           "items": {},
           "title": "Webdomains",
           "type": "array"
         },
         "SafariPasswordAutoFillDomains": {
           "default": null,
-          "description": "An array of domains. Users can only save passwords in Safari from URLs matching the patterns listed here. This property doesn't disable the autofill feature itself.\n\nSupervised devices or Shared iPads need this property to enable saving passwords in Safari.\n\nAvailable in iOS 9.3 and later.",
+          "description": "An array of domains. Users can only save passwords in Safari from URLs matching the patterns listed here. This property doesn't disable the autofill feature itself.\n\nSupervised devices or Shared iPad need this property to enable saving passwords in Safari.",
           "items": {},
           "title": "Safaripasswordautofilldomains",
           "type": "array"
         },
         "CrossSiteTrackingPreventionRelaxedDomains": {
           "default": null,
-          "description": "An array of up to 10 strings. URLs matching the patterns listed here have relaxed enforcement of cross-site tracking prevention.\n\nAvailable in iOS 16.2 and later and macOS 13.1 and later.",
+          "description": "An array of up to 10 strings. URLs matching the patterns listed here have relaxed enforcement of cross-site tracking prevention.",
           "items": {},
           "title": "Crosssitetrackingpreventionrelaxeddomains",
           "type": "array"
         },
         "CrossSiteTrackingPreventionRelaxedApps": {
           "default": null,
-          "description": "An array of up to 10 strings representing app bundle-ids. Apps matching the bundle-ids listed here have relaxed enforcement of cross-site tracking prevention for the domains listed in `CrossSiteTrackingPreventionRelaxedDomains`.\n\nAvailable in iOS 18 and later and macOS 15 and later.",
+          "description": "An array of up to 10 strings representing app bundle-ids. Apps matching the bundle-ids listed here have relaxed enforcement of cross-site tracking prevention for the domains listed in `CrossSiteTrackingPreventionRelaxedDomains`.",
           "items": {},
           "title": "Crosssitetrackingpreventionrelaxedapps",
           "type": "array"
@@ -2901,7 +2907,7 @@
         },
         "SMIMESigningEnabled": {
           "default": false,
-          "description": "If `true`, the system enables S/MIME signing for this account. Available in iOS 10.0 and later.",
+          "description": "If `true`, the system enables S/MIME signing for this account.",
           "title": "Smimesigningenabled",
           "type": "boolean"
         },
@@ -2913,7 +2919,7 @@
         },
         "SMIMEEncryptionEnabled": {
           "default": false,
-          "description": "If `true`, the system enables S/MIME encryption for this account. Available in iOS 10.0 and later. As of iOS 12.0, this key is deprecated. Use `SMIMEEncryptByDefault` instead.",
+          "description": "If `true`, the system enables S/MIME encryption for this account. This key is deprecated. Use `SMIMEEncryptByDefault` instead.",
           "title": "Smimeencryptionenabled",
           "type": "boolean"
         },
@@ -2925,7 +2931,7 @@
         },
         "SMIMEEnablePerMessageSwitch": {
           "default": false,
-          "description": "If `true`, the system displays the per-message encryption switch in the Mail Compose UI.\n\nAvailable in iOS 8.0 and later. As of iOS 12.0, this key is deprecated. Use `SMIMEEnableEncryptionPerMessageSwitch` instead.",
+          "description": "If `true`, the system displays the per-message encryption switch in the Mail Compose UI.\n\n This key is deprecated. Use `SMIMEEnableEncryptionPerMessageSwitch` instead.",
           "title": "Smimeenablepermessageswitch",
           "type": "boolean"
         },
@@ -2962,37 +2968,37 @@
         },
         "SMIMESigningUserOverrideable": {
           "default": false,
-          "description": "If `true`, the user can turn S/MIME signing on or off in Settings. Available in iOS 12.0 and later.",
+          "description": "If `true`, the user can turn S/MIME signing on or off in Settings.",
           "title": "Smimesigninguseroverrideable",
           "type": "boolean"
         },
         "SMIMESigningCertificateUUIDUserOverrideable": {
           "default": false,
-          "description": "If `true`, the user can select the signing identity. Available in iOS 12.0 and later.",
+          "description": "If `true`, the user can select the signing identity.",
           "title": "Smimesigningcertificateuuiduseroverrideable",
           "type": "boolean"
         },
         "SMIMEEncryptByDefault": {
           "default": false,
-          "description": "If `true`, the system enables S/MIME encryption by default. If `SMIMEEnableEncryptionPerMessageSwitch` is `false`, the user can't change this default. Available in iOS 12.0 and later.",
+          "description": "If `true`, the system enables S/MIME encryption by default. If `SMIMEEnableEncryptionPerMessageSwitch` is `false`, the user can't change this default.",
           "title": "Smimeencryptbydefault",
           "type": "boolean"
         },
         "SMIMEEncryptByDefaultUserOverrideable": {
           "default": false,
-          "description": "If `true`, the system enables encryption by default and the user can't change it. Available in iOS 12.0 and later.",
+          "description": "If `true`, the system enables encryption by default and the user can't change it.",
           "title": "Smimeencryptbydefaultuseroverrideable",
           "type": "boolean"
         },
         "SMIMEEncryptionCertificateUUIDUserOverrideable": {
           "default": false,
-          "description": "If `true`, the user can select the S/MIME encryption identity, and encryption is on.Available in iOS 12.0 and later.",
+          "description": "If `true`, the user can select the S/MIME encryption identity, and encryption is on.",
           "title": "Smimeencryptioncertificateuuiduseroverrideable",
           "type": "boolean"
         },
         "SMIMEEnableEncryptionPerMessageSwitch": {
           "default": false,
-          "description": "If `true`, the system displays the per-message encryption switch in the Mail Compose UI. Available in iOS 12.0 and later.",
+          "description": "If `true`, the system displays the per-message encryption switch in the Mail Compose UI.",
           "title": "Smimeenableencryptionpermessageswitch",
           "type": "boolean"
         },
@@ -3070,13 +3076,13 @@
         },
         "OverridePreviousPassword": {
           "default": false,
-          "description": "If `true`, the system overrides the previous user/EAS password with the new EAS password in the payload. Available in iOS 14 and later.",
+          "description": "If `true`, the system overrides the previous user/EAS password with the new EAS password in the payload.",
           "title": "Overridepreviouspassword",
           "type": "boolean"
         },
         "VPNUUID": {
           "default": null,
-          "description": "The VPNUUID of the per-app VPN the account uses for network communication. Available in iOS 14 and later.",
+          "description": "The VPNUUID of the per-app VPN the account uses for network communication.",
           "title": "Vpnuuid",
           "type": "string"
         },
@@ -3130,7 +3136,7 @@
         },
         "OAuth": {
           "default": false,
-          "description": "If `true`, the system enables OAuth for authentication. Don't specify a password if `OAuth` is `true`. Available in macOS 10.14 and later",
+          "description": "If `true`, the system enables OAuth for authentication. Don't specify a password if `OAuth` is `true`.",
           "title": "Oauth",
           "type": "boolean"
         },
@@ -3384,7 +3390,7 @@
         },
         "ForceEnableInSetupAssistant": {
           "default": false,
-          "description": "If `true`, and installation of this payload occurs after enrolling with MDM in Setup Assistant, the system requests Setup Assistant to enable FileVault at setup time.\n\nTo use this, enable the Await Device Configured DEP configuration option and send this profile with this key set, before sending the `DeviceConfiguredCommand`.\n\nAn admin SecureToken user is required, otherwise the FileVault pane does not appear.",
+          "description": "If `true`, and installation of this payload occurs after enrolling with MDM in Setup Assistant, the system requests Setup Assistant to enable FileVault at setup time.\n\nTo use this, enable the Await Device Configured ADE configuration option and send this profile with this key set, before sending the `DeviceConfiguredCommand`.\n\nAn admin SecureToken user is required, otherwise the FileVault pane doesn't appear.",
           "title": "Forceenableinsetupassistant",
           "type": "boolean"
         },
@@ -3468,13 +3474,13 @@
         },
         "RedirectURL": {
           "default": null,
-          "description": "The URL to which FDE recovery keys should be sent instead of to Apple. The URL must begin with https://.",
+          "description": "The URL to which the device sends FDE recovery keys instead of to Apple. The URL must begin with https://.",
           "title": "Redirecturl",
           "type": "string"
         },
         "EncryptCertPayloadUUID": {
           "default": null,
-          "description": "The UUID of a payload within the same profile that contains a certificate used to encrypt the recovery key when it's sent to the redirected URL. The referenced payload must be of type \\`com.apple.security.pkcs1\\`.",
+          "description": "The UUID of a payload within the same profile that contains a certificate used to encrypt the recovery key when the device sends it to the redirected URL. The referenced payload must be of type `com.apple.security.pkcs1`.",
           "title": "Encryptcertpayloaduuid",
           "type": "string"
         },
@@ -3529,13 +3535,13 @@
         },
         "ManagementAllowsKnownFolderSyncing": {
           "default": true,
-          "description": "If `false`, the device prevents the File Provider extension from using desktop and documents synchronization in any app. This does not impact the ability for apps to utilize the File Provider extension for file and folder syncing with remote storage.",
+          "description": "If `false`, the device prevents the File Provider extension from using desktop and documents synchronization in any app. This doesn't impact the ability for apps to utilize the File Provider extension for file and folder syncing with remote storage.",
           "title": "Managementallowsknownfoldersyncing",
           "type": "boolean"
         },
         "ManagementKnownFolderSyncingAllowList": {
           "default": null,
-          "description": "An array of strings representing the composed identifiers of apps. The device allows the corresponding apps to use File Provider extension desktop and documents synchronization. If present, and `ManagementAllowsKnownFolderSyncing` is set to `true`, the device allows only the apps in this list to use desktop and documents synchronization. This key is ignored if `ManagementAllowsKnownFolderSyncing` is set to `false`. This setting does not impact the ability for apps to use File Provider extension volume access. The format of the app identifiers is \"Bundle-ID (Team-ID)\", for example `com.example.app (ABCD1234)`.",
+          "description": "An array of strings representing the composed identifiers of apps. The device allows the corresponding apps to use File Provider extension desktop and documents synchronization. If present, and `ManagementAllowsKnownFolderSyncing` is set to `true`, the device allows only the apps in this list to use desktop and documents synchronization. This key is ignored if `ManagementAllowsKnownFolderSyncing` is set to `false`. This setting doesn't impact the ability for apps to use File Provider extension volume access. The format of the app identifiers is \"Bundle-ID (Team-ID)\", for example `com.example.app (ABCD1234)`.",
           "items": {},
           "title": "Managementknownfoldersyncingallowlist",
           "type": "array"
@@ -3595,12 +3601,6 @@
           "description": "If `true`, the system disables the Finder's burn support.",
           "title": "Prohibitburn",
           "type": "boolean"
-        },
-        "InterfaceLevel": {
-          "default": null,
-          "description": "Specifies whether Finder should operate in Simple or Full mode.",
-          "title": "Interfacelevel",
-          "type": "string"
         },
         "ProhibitConnectTo": {
           "default": false,
@@ -3705,27 +3705,15 @@
           "title": "Applications",
           "type": "array"
         },
-        "EnableLogging": {
-          "default": null,
-          "description": "If `true`, the system enables logging. Available in macOS 12 through macOS 14.6.",
-          "title": "Enablelogging",
-          "type": "boolean"
-        },
-        "LoggingOption": {
-          "default": null,
-          "description": "The type of logging. Available in macOS 12 and through macOS 14.6.",
-          "title": "Loggingoption",
-          "type": "string"
-        },
         "AllowSigned": {
           "default": true,
-          "description": "If `true`, the system allows built-in software to receive incoming connections. Available in macOS 12.3 and later.\n\n> Note:\n> The system ensures that `AllowSigned` always has a value. If missing from the payload, the system sets it to `true`.",
+          "description": "If `true`, the system allows built-in software to receive incoming connections.\n\n> Note:\n> The system ensures that `AllowSigned` always has a value. If missing from the payload, the system sets it to `true`.",
           "title": "Allowsigned",
           "type": "boolean"
         },
         "AllowSignedApp": {
           "default": true,
-          "description": "If `true`, the system allows downloaded signed software to receive incoming connections. Available in macOS 12.3 and later.\n\n> Note:\n> The system ensures that `AllowSignedApp` always has a value. If missing from the payload, the system sets it to `true`.",
+          "description": "If `true`, the system allows downloaded signed software to receive incoming connections.\n\n> Note:\n> The system ensures that `AllowSignedApp` always has a value. If missing from the payload, the system sets it to `true`.",
           "title": "Allowsignedapp",
           "type": "boolean"
         },
@@ -3761,7 +3749,7 @@
         },
         "Name": {
           "default": "",
-          "description": "The user-visible name for the font. This field is replaced by the actual name of the font after installation. Each payload must contain exactly one font file in trueType (.ttf) or OpenType (.otf) format. Collection formats (.ttc or .otc) are not supported.\n\nFonts are identified by their embedded PostScript names. Two fonts with the same PostScript name are considered to be the same font even if their contents differ. Installing two different fonts with the same PostScript name isn't supported, and the resulting behavior is undefined.",
+          "description": "The user-visible name for the font. The device replaces this field with the actual name of the font after installation. Each payload must contain exactly one font file in trueType (.ttf) or OpenType (.otf) format. The device doesn't support collection formats (.ttc or .otc).\n\nThe device identifies fonts by their embedded PostScript names. The device considers two fonts with the same PostScript name to be the same font, even if their contents differ. The device doesn't support installing two different fonts with the same PostScript name, and the resulting behavior is undefined.",
           "title": "Name",
           "type": "string"
         },
@@ -3906,7 +3894,7 @@
         },
         "VPNUUID": {
           "default": null,
-          "description": "The VPNUUID of the per-app VPN the account uses for network communication. Available in iOS 14 and later.",
+          "description": "The VPNUUID of the per-app VPN the account uses for network communication.",
           "title": "Vpnuuid",
           "type": "string"
         },
@@ -4174,7 +4162,7 @@
         },
         "VPNUUID": {
           "default": null,
-          "description": "The VPNUUID of the per-app VPN the account uses for network communication. Available in iOS 14 and later.",
+          "description": "The VPNUUID of the per-app VPN the account uses for network communication.",
           "title": "Vpnuuid",
           "type": "string"
         },
@@ -4385,6 +4373,12 @@
           "title": "Adminhostinfo",
           "type": "string"
         },
+        "AdminMayDisableMCX": {
+          "default": false,
+          "description": "If `true`, a local administrator user can bypass or disable managed preferences (MCX settings) for their login session. The device presents the user with this option at login only when the user is a local administrator, and other users are not logged in.",
+          "title": "Adminmaydisablemcx",
+          "type": "boolean"
+        },
         "AllowList": {
           "default": null,
           "description": "The list of user GUIDs or group GUIDs of users that the system allows to log in. An asterisk (`*`) string specifies all users or groups. This only applies to network accounts and mobile accounts.",
@@ -4416,6 +4410,12 @@
           "description": "If `true`, the system disables the Restart item.",
           "title": "Restartdisabled",
           "type": "boolean"
+        },
+        "RetriesUntilHint": {
+          "default": 0,
+          "description": "If specified, allows a certain number of retries until the device shows a password hint. The device shows no hints if set to a value of 0.",
+          "title": "Retriesuntilhint",
+          "type": "integer"
         },
         "SleepDisabled": {
           "default": false,
@@ -4455,13 +4455,13 @@
         },
         "LogOutDisabledWhileLoggedIn": {
           "default": false,
-          "description": "If `true`, the system disables the Log Out menu item when the user is logged in. Available in macOS 10.13 and later.",
+          "description": "If `true`, the system disables the Log Out menu item when the user is logged in.",
           "title": "Logoutdisabledwhileloggedin",
           "type": "boolean"
         },
         "DisableScreenLockImmediate": {
           "default": false,
-          "description": "If `true`, the system disables the immediate Screen Lock functions. Available in macOS 10.13 and later.",
+          "description": "If `true`, the system disables the immediate Screen Lock functions.",
           "title": "Disablescreenlockimmediate",
           "type": "boolean"
         },
@@ -4488,6 +4488,18 @@
           "description": "An optional user password to set up auto login. This must match the `AutologinUsername` user's current password.",
           "title": "Autologinpassword",
           "type": "string"
+        },
+        "ForceWifiConfigurationOnLockScreen": {
+          "default": false,
+          "description": "If `true`, the system allows the user to select WiFi networks at login or unlock.",
+          "title": "Forcewificonfigurationonlockscreen",
+          "type": "boolean"
+        },
+        "ForceCaptivePortalConnectionFromLockScreen": {
+          "default": false,
+          "description": "If `true`, the system allows use of the captive WiFi portal at login or unlock.",
+          "title": "Forcecaptiveportalconnectionfromlockscreen",
+          "type": "boolean"
         },
         "PayloadType": {
           "const": "com.apple.loginwindow",
@@ -4619,19 +4631,19 @@
         },
         "Topic": {
           "default": null,
-          "description": "The topic that MDM listens to for push notifications. The certificate that the server uses to send push notifications must have the same topic in its subject. The topic must begin with the 'com.apple.mgmt.' prefix.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the update is rejected.",
+          "description": "The topic that MDM listens to for push notifications. The certificate that the server uses to send push notifications must have the same topic in its subject. The topic must begin with the 'com.apple.mgmt.' prefix.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the system rejects the update.",
           "title": "Topic",
           "type": "string"
         },
         "ServerURL": {
           "default": null,
-          "description": "The URL that the device contacts to retrieve device management instructions. The URL must begin with the `https://` URL scheme, and may contain a port number\n(`:1234`, for example).\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the update is rejected.",
+          "description": "The URL that the device contacts to retrieve device management instructions. The URL must begin with the `https://` URL scheme, and may contain a port number\n(`:1234`, for example).\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the system rejects the update.",
           "title": "Serverurl",
           "type": "string"
         },
         "CheckInURL": {
           "default": null,
-          "description": "The URL that the device should use to check in during installation. The URL must begin with the `https://` URL scheme and may contain a port number (`:1234`, for example). If not set, the system uses `ServerURL`.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the update is rejected.",
+          "description": "The URL that the device should use to check in during installation. The URL must begin with the `https://` URL scheme and may contain a port number (`:1234`, for example). If not set, the system uses `ServerURL`.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the system rejects the update.",
           "title": "Checkinurl",
           "type": "string"
         },
@@ -4661,13 +4673,13 @@
         },
         "AssignedManagedAppleID": {
           "default": null,
-          "description": "The Managed Apple Account pre-assigned to the authenticated user. Required for account-driven enrollments. Available in iOS 15 and later, and macOS 14 and later.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the update is rejected.",
+          "description": "The Managed Apple Account pre-assigned to the authenticated user. Required for account-driven enrollments.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the system rejects the update.",
           "title": "Assignedmanagedappleid",
           "type": "string"
         },
         "EnrollmentMode": {
           "default": null,
-          "description": "The enrollment mode the server indicates to use when enrolling. Required for account-driven enrollment. Available in iOS 15 and macOS 14, and later.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the update is rejected.",
+          "description": "The enrollment mode the server indicates to use when enrolling. Required for account-driven enrollment.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the system rejects the update.",
           "title": "Enrollmentmode",
           "type": "string"
         },
@@ -4706,13 +4718,13 @@
         },
         "RequiredAppIDForMDM": {
           "default": null,
-          "description": "This property specifies an iTunes Store ID for an app the system can install with the InstallApplicationCommand, without any approval from the user. The MDM vendor or managing organization generally provides this app, which enhances the management experience for the user. The device shows the user details about this app in the account-driven enrollment process prior to installing the MDM profile. Use this property with account-driven MDM enrollments that normally require user approval for app installs through MDM.\nOnly account-driven enrollments support this property and other enrollment types ignore it.\nAvailable in iOS 15.1 and later.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the update is rejected.",
+          "description": "This property specifies an iTunes Store ID for an app the system can install with the InstallApplicationCommand, without any approval from the user. The MDM vendor or managing organization generally provides this app, which enhances the management experience for the user. The device shows the user details about this app in the account-driven enrollment process prior to installing the MDM profile. Use this property with account-driven MDM enrollments that normally require user approval for app installs through MDM.\nOnly account-driven enrollments support this property and other enrollment types ignore it.\n\n> Note:\n> When updating the payload, the value of this key must not change. Any change is an error, and the system rejects the update.",
           "title": "Requiredappidformdm",
           "type": "integer"
         },
         "PromptUserToAllowBootstrapTokenForAuthentication": {
           "default": false,
-          "description": "If 'true', the system warns the user that they need to reboot into RecoveryOS and allow the MDM to use the bootstrap token for authentication for certain sensitive operations such as enabling kernel extensions or installing some types of software updates. If the MDM doesn't need to perform these operations, it can leave this key set to 'false', and the user isn't notified.\nThe SettingsCommand.Command.Settings.MDMOptions.MDMOptions command overrides this default value.\nThis setting only applies to devices that have 'BootstrapTokenRequiredForSoftwareUpdate' or 'BootstrapTokenRequiredForKernelExtensionApproval' set to 'true' in their SecurityInfoResponse.SecurityInfo.\nDEP-enrolled devices are automatically allowed to use the bootstrap token for authentication.\nAvailable in macOS 11 and later.",
+          "description": "If 'true', the system warns the user that they need to reboot into RecoveryOS and allow the MDM to use the bootstrap token for authentication for certain sensitive operations such as enabling kernel extensions or installing some types of software updates. If the MDM doesn't need to perform these operations, it can leave this key set to 'false', and the user isn't notified.\nThe SettingsCommand.Command.Settings.MDMOptions.MDMOptions command overrides this default value.\nThis setting only applies to devices that have 'BootstrapTokenRequiredForSoftwareUpdate' or 'BootstrapTokenRequiredForKernelExtensionApproval' set to 'true' in their SecurityInfoResponse.SecurityInfo.\nADE-enrolled devices are automatically allowed to use the bootstrap token for authentication.",
           "title": "Promptusertoallowbootstraptokenforauthentication",
           "type": "boolean"
         },
@@ -4814,7 +4826,7 @@
         },
         "OutgoingPasswordSameAsIncomingPassword": {
           "default": false,
-          "description": "If `true`, the system prompts the user only once for the password, which it uses for both outgoing and incoming mail.\n\nThis setting is only supported by interactive profile installations. Not supported by non-interactive installations, such as MDM on iOS.",
+          "description": "If `true`, the system prompts the user only once for the password, which it uses for both outgoing and incoming mail.\n\nThis setting supports only interactive profile installations. Non-interactive installations, such as MDM on iOS, don't support this setting.",
           "title": "Outgoingpasswordsameasincomingpassword",
           "type": "boolean"
         },
@@ -4952,7 +4964,7 @@
         },
         "VPNUUID": {
           "default": null,
-          "description": "The VPNUUID of the per-app VPN the account uses for network communication. Available in iOS 14 and later.",
+          "description": "The VPNUUID of the per-app VPN the account uses for network communication.",
           "title": "Vpnuuid",
           "type": "string"
         },
@@ -5274,7 +5286,7 @@
         },
         "BurnSupport": {
           "default": null,
-          "description": "Configure disc-burn. Allowed values:\n- `off`: The system disables disc burning.\n- `on`: The system allows normal default operation. Setting this key to `on` doesn't enable disc burn support if other mechanisms or preferences disabled it. Needs to be enabled with the `Finder` profile.\n- `authenticate`: The system requires authentication.",
+          "description": "Configure disc-burn. Allowed values:\n* `off`: The system disables disc burning.\n* `on`: The system allows normal default operation. Setting this key to `on` doesn't enable disc burn support if other mechanisms or preferences disabled it. Needs to be enabled with the `Finder` profile.\n* `authenticate`: The system requires authentication.",
           "title": "Burnsupport",
           "type": "string"
         },
@@ -5585,23 +5597,44 @@
           "title": "Familycontrolsenabled",
           "type": "boolean"
         },
-        "whiteList": {
+        "allowList": {
           "default": null,
           "description": "The allow list of app item dictionaries.",
+          "items": {},
+          "title": "Allowlist",
+          "type": "array"
+        },
+        "whiteList": {
+          "default": null,
+          "description": "The allow list of app item dictionaries. This property is deprecated in macOS 10.15 and later - use `allowList` instead.",
           "items": {},
           "title": "Whitelist",
           "type": "array"
         },
+        "pathDenyList": {
+          "default": null,
+          "description": "The paths to apps in the deny list.",
+          "items": {},
+          "title": "Pathdenylist",
+          "type": "array"
+        },
         "pathBlackList": {
           "default": null,
-          "description": "The paths to apps in the deny list. This property is deprecated in macOS 10.15 and later.",
+          "description": "The paths to apps in the deny list. This property is deprecated in macOS 10.15 and later - use `pathDenyList` instead.",
           "items": {},
           "title": "Pathblacklist",
           "type": "array"
         },
+        "pathAllowList": {
+          "default": null,
+          "description": "The paths to apps in the allow list.",
+          "items": {},
+          "title": "Pathallowlist",
+          "type": "array"
+        },
         "pathWhiteList": {
           "default": null,
-          "description": "The paths to apps in the allow list. This property is deprecated in macOS 10.15 and later.",
+          "description": "The paths to apps in the allow list. This property is deprecated in macOS 10.15 and later - use `pathAllowList` instead.",
           "items": {},
           "title": "Pathwhitelist",
           "type": "array"
@@ -5662,7 +5695,7 @@
         },
         "siteAllowList": {
           "default": null,
-          "description": "An array of sites that defines an allow list. If specified, this defines additional allowed sites besides those in the automated allow list and deny list, including disallowed adult sites.\n\nThis key is required if `allowListEnabled` is `true`.",
+          "description": "An array of sites that defines an allow list. If specified, this defines additional allowed sites besides those in the automated allow list and deny list, including disallowed adult sites.\n\nThe device requires this key if `allowListEnabled` is `true`.",
           "items": {},
           "title": "Siteallowlist",
           "type": "array"
@@ -5970,20 +6003,20 @@
         },
         "minutesUntilFailedLoginReset": {
           "default": null,
-          "description": "The number of minutes before the system resets the login after the maximum number of unsuccessful login attempts is reached. This key requires setting `maxFailedAttempts`. Available in macOS 10.10 and later.",
+          "description": "The number of minutes before the system resets the login after the maximum number of unsuccessful login attempts is reached. This key requires setting `maxFailedAttempts`.",
           "title": "Minutesuntilfailedloginreset",
           "type": "integer"
         },
         "changeAtNextAuth": {
           "default": false,
-          "description": "If `true`, the system causes a password reset to occur the next time the user tries to authenticate. If this key is set in a device profile, the setting takes effect for all users, and admin authentications may fail until the admin user password is also reset. Available in macOS 10.13 and later.",
+          "description": "If `true`, the system causes a password reset to occur the next time the user tries to authenticate. If this key is set in a device profile, the setting takes effect for all users, and admin authentications may fail until the admin user password is also reset.",
           "title": "Changeatnextauth",
           "type": "boolean"
         },
         "customRegex": {
           "additionalProperties": true,
           "default": null,
-          "description": "Specifies a regular expression, and its description, used to enforce password compliance. Use the simpler passcode restrictions whenever possible, and rely on regular expression matching only when necessary. Mistakes in regular expressions can lead to frustrating user experiences, such as unsatisfiable passcode policies, or policy descriptions that don't match the enforced policy.\n\nAvailable in macOS 14 and later.",
+          "description": "Specifies a regular expression, and its description, used to enforce password compliance. Use the simpler passcode restrictions whenever possible, and rely on regular expression matching only when necessary. Mistakes in regular expressions can lead to frustrating user experiences, such as unsatisfiable passcode policies, or policy descriptions that don't match the enforced policy.",
           "title": "Customregex",
           "type": "object"
         },
@@ -6205,14 +6238,14 @@
         },
         "MatchFQDNs": {
           "default": null,
-          "description": "A list of Fully Qualified Domain Names (FQDNs) to be routed through the servers contained in `Relays`. Any connection that matches an FQDN in the list exactly uses the relay servers. If this list and `MatchDomains` are empty, the system routes traffic to all domains to the relay servers, except those that match an excluded domain or excluded FQDN.",
+          "description": "A list of Fully Qualified Domain Names (FQDNs) to route through the servers contained in `Relays`. Any connection that matches an FQDN in the list exactly uses the relay servers. If this list and `MatchDomains` are empty, the system routes traffic to all domains to the relay servers, except those that match an excluded domain or excluded FQDN.",
           "items": {},
           "title": "Matchfqdns",
           "type": "array"
         },
         "ExcludedFQDNs": {
           "default": null,
-          "description": "A list of Fully Qualified Domain Names (FQDNs) to exclude from routing through the servers contained in `Relays`. Any connection that matches an FQDN in the list exactly won't use the relay server. When `MatchDomains` is also present, any FQDN listed in the list should be a subdomain of at least one `MatchDomain` value, otherwise it will not have any effect.",
+          "description": "A list of Fully Qualified Domain Names (FQDNs) to exclude from routing through the servers contained in `Relays`. Any connection that matches an FQDN in the list exactly won't use the relay server. When `MatchDomains` is also present, any FQDN listed in the list should be a subdomain of at least one `MatchDomain` value, otherwise it won't have any effect.",
           "items": {},
           "title": "Excludedfqdns",
           "type": "array"
@@ -6333,7 +6366,7 @@
         },
         "allowAppleIntelligenceReport": {
           "default": true,
-          "description": "If `false`, the system disables Apple Intelligence reports.",
+          "description": "If `false`, the system disables Apple Intelligence reports.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowappleintelligencereport",
           "type": "boolean"
         },
@@ -6369,25 +6402,25 @@
         },
         "allowAssistant": {
           "default": true,
-          "description": "If `false`, the system disables Siri.",
+          "description": "If `false`, the system disables Siri.\n\nDeprecated: use the declarative management `com.apple.configuration.siri.settings` configuration.",
           "title": "Allowassistant",
           "type": "boolean"
         },
         "allowAssistantUserGeneratedContent": {
           "default": true,
-          "description": "If `false`, the system prevents Siri from querying user-generated content from the web.",
+          "description": "If `false`, the system prevents Siri from querying user-generated content from the web.\n\nDeprecated: use the declarative management `com.apple.configuration.siri.settings` configuration.",
           "title": "Allowassistantusergeneratedcontent",
           "type": "boolean"
         },
         "allowAssistantWhileLocked": {
           "default": true,
-          "description": "If `false`, the system disables Siri when the device is locked. The system ignores this restriction if the device doesn't have a passcode set.",
+          "description": "If `false`, the system disables Siri when the device is locked. The system ignores this restriction if the device doesn't have a passcode set.\n\nDeprecated: use the declarative management `com.apple.configuration.siri.settings` configuration.",
           "title": "Allowassistantwhilelocked",
           "type": "boolean"
         },
         "allowAutoCorrection": {
           "default": true,
-          "description": "If `false`, the system disables keyboard autocorrection.",
+          "description": "If `false`, the system disables keyboard autocorrection.\n\nDeprecated: use the declarative management `com.apple.configuration.keyboard.settings` configuration.",
           "title": "Allowautocorrection",
           "type": "boolean"
         },
@@ -6549,7 +6582,7 @@
         },
         "allowContinuousPathKeyboard": {
           "default": true,
-          "description": "If `false`, the system disables QuickPath keyboard.",
+          "description": "If `false`, the system disables QuickPath keyboard.\n\nDeprecated: use the declarative management `com.apple.configuration.keyboard.settings` configuration.",
           "title": "Allowcontinuouspathkeyboard",
           "type": "boolean"
         },
@@ -6573,7 +6606,7 @@
         },
         "allowDefinitionLookup": {
           "default": true,
-          "description": "If `false`, the system disables definition lookup.",
+          "description": "If `false`, the system disables definition lookup.\n\nDeprecated: use the declarative management `com.apple.configuration.keyboard.settings` configuration.",
           "title": "Allowdefinitionlookup",
           "type": "boolean"
         },
@@ -6603,7 +6636,7 @@
         },
         "allowDictation": {
           "default": true,
-          "description": "If `false`, the system disallows dictation input.",
+          "description": "If `false`, the system disallows dictation input.\n\nDeprecated: use the declarative management `com.apple.configuration.keyboard.settings` configuration.",
           "title": "Allowdictation",
           "type": "boolean"
         },
@@ -6616,7 +6649,7 @@
         },
         "allowedExternalIntelligenceWorkspaceIDs": {
           "default": null,
-          "description": "An array of strings, but currently restricted to a single element. If present, Apple Intelligence allows use of only the given external integration workspace ID, and requires a sign-in to make requests. The user is required to sign in to integrations that support signing in. Multiple payloads combine using an intersect operation. This means the allowed set of workspace IDs can become the empty set if multiple payloads specify conflicting values.",
+          "description": "An array of strings, but currently restricted to a single element. If present, Apple Intelligence allows use of only the given external integration workspace ID, and requires a sign-in to make requests. The user is required to sign in to integrations that support signing in. Multiple payloads combine using an intersect operation. This means the allowed set of workspace IDs can become the empty set if multiple payloads specify conflicting values.\n\nDeprecated: use the declarative management `com.apple.configuration.external-intelligence.settings` configuration.",
           "items": {},
           "title": "Allowedexternalintelligenceworkspaceids",
           "type": "array"
@@ -6653,7 +6686,7 @@
         },
         "allowESIMModification": {
           "default": true,
-          "description": "If `false`, the system disables modifications of eSIMs.",
+          "description": "If `false`, the system disables modifications of eSIMs. This also disables the phone number sharing setup on iPhones, in iOS 27 and later.",
           "title": "Allowesimmodification",
           "type": "boolean"
         },
@@ -6671,13 +6704,13 @@
         },
         "allowExternalIntelligenceIntegrations": {
           "default": true,
-          "description": "If `false`, disables the use of external, cloud-based intelligence services with Siri. In iOS, this restriction is temporarily allowed on unsupervised and user enrollments. In a future release, this restriction will require supervision, and will be ignored on unsupervised devices.",
+          "description": "If `false`, disables the use of external, cloud-based intelligence services with Siri. In iOS, this restriction is temporarily allowed on unsupervised and user enrollments. In a future release, this restriction will require supervision, and will be ignored on unsupervised devices.\n\nDeprecated: use the declarative management `com.apple.configuration.external-intelligence.settings` configuration.",
           "title": "Allowexternalintelligenceintegrations",
           "type": "boolean"
         },
         "allowExternalIntelligenceIntegrationsSignIn": {
           "default": true,
-          "description": "If `false`, forces external intelligence providers into anonymous mode. If a user is already signed in to an external intelligence provider, applying this restriction signs them out when attempting the next request.",
+          "description": "If `false`, forces external intelligence providers into anonymous mode. If a user is already signed in to an external intelligence provider, applying this restriction signs them out when attempting the next request.\n\nDeprecated: use the declarative management `com.apple.configuration.external-intelligence.settings` configuration.",
           "title": "Allowexternalintelligenceintegrationssignin",
           "type": "boolean"
         },
@@ -6737,7 +6770,7 @@
         },
         "allowGenmoji": {
           "default": true,
-          "description": "If `false`, prohibits creating new Genmoji.",
+          "description": "If `false`, prohibits creating new Genmoji.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowgenmoji",
           "type": "boolean"
         },
@@ -6755,13 +6788,13 @@
         },
         "allowImagePlayground": {
           "default": true,
-          "description": "If `false`, prohibits the use of image generation.",
+          "description": "If `false`, prohibits the use of image generation.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowimageplayground",
           "type": "boolean"
         },
         "allowImageWand": {
           "default": true,
-          "description": "If `false`, prohibits the use of Image Wand.",
+          "description": "If `false`, prohibits the use of Image Wand.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowimagewand",
           "type": "boolean"
         },
@@ -6803,13 +6836,13 @@
         },
         "allowKeyboardShortcuts": {
           "default": true,
-          "description": "If `false`, the system disables keyboard shortcuts.",
+          "description": "If `false`, the system disables keyboard shortcuts.\n\nDeprecated: use the declarative management `com.apple.configuration.keyboard.settings` configuration.",
           "title": "Allowkeyboardshortcuts",
           "type": "boolean"
         },
         "allowListedAppBundleIDs": {
           "default": null,
-          "description": "If present, the system only shows or can launch apps with bundle IDs in the array. Include the value `com.apple.webapp` to allow all webclips. This applies to App Store apps, marketplace apps, and locally installed apps (using Configurator, Xcode, and so forth).",
+          "description": "If present, the system only shows or can launch apps with bundle IDs in the array. Include the value `com.apple.webapp` to allow all webclips. This applies to App Store apps, marketplace apps, and locally installed apps (using Configurator, Xcode, and so forth).\n\nDeprecated: use the declarative management `com.apple.configuration.app.settings` configuration.",
           "items": {},
           "title": "Allowlistedappbundleids",
           "type": "array"
@@ -6852,13 +6885,13 @@
         },
         "allowMailSmartReplies": {
           "default": true,
-          "description": "If `false`, disables smart replies in Mail.",
+          "description": "If `false`, disables smart replies in Mail.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowmailsmartreplies",
           "type": "boolean"
         },
         "allowMailSummary": {
           "default": true,
-          "description": "If `false`, disables the ability to create summaries of email messages manually. This doesn't affect automatic summary generation.",
+          "description": "If `false`, disables the ability to create summaries of email messages manually. This doesn't affect automatic summary generation.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowmailsummary",
           "type": "boolean"
         },
@@ -6912,13 +6945,13 @@
         },
         "allowNotesTranscription": {
           "default": true,
-          "description": "If `false`, disables transcription in Notes.",
+          "description": "If `false`, disables transcription in Notes.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allownotestranscription",
           "type": "boolean"
         },
         "allowNotesTranscriptionSummary": {
           "default": true,
-          "description": "If `false`, disables transcription summarization in Notes.",
+          "description": "If `false`, disables transcription summarization in Notes.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allownotestranscriptionsummary",
           "type": "boolean"
         },
@@ -6990,7 +7023,7 @@
         },
         "allowPersonalizedHandwritingResults": {
           "default": true,
-          "description": "If false, prevents the system from generating text in the user's handwriting.",
+          "description": "If false, prevents the system from generating text in the user's handwriting.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowpersonalizedhandwritingresults",
           "type": "boolean"
         },
@@ -7008,7 +7041,7 @@
         },
         "allowPredictiveKeyboard": {
           "default": true,
-          "description": "If `false`, the system disables predictive keyboards.",
+          "description": "If `false`, the system disables predictive keyboards.\n\nDeprecated: use the declarative management `com.apple.configuration.keyboard.settings` configuration.",
           "title": "Allowpredictivekeyboard",
           "type": "boolean"
         },
@@ -7032,13 +7065,13 @@
         },
         "allowRapidSecurityResponseInstallation": {
           "default": true,
-          "description": "If `false`, the system prohibits installation of Background Security Improvements.",
+          "description": "If `false`, the system prohibits installation of Background Security Improvements.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Allowrapidsecurityresponseinstallation",
           "type": "boolean"
         },
         "allowRapidSecurityResponseRemoval": {
           "default": true,
-          "description": "If `false`, the system prohibits removal of Background Security Improvements.",
+          "description": "If `false`, the system prohibits removal of Background Security Improvements.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Allowrapidsecurityresponseremoval",
           "type": "boolean"
         },
@@ -7068,7 +7101,7 @@
         },
         "allowRosettaUsageAwareness": {
           "default": true,
-          "description": "If `false`, disables Rosetta usage awareness. When Rosetta usage awareness is active, a pop-up dialog is displayed to the user when an app that is using Rosetta is launched. The pop-up dialog indicates that Rosetta will be removed in a future version of the operating system so that the user can contact the app vendor regarding a replacement for the current app.",
+          "description": "If `false`, disables Rosetta usage awareness. When Rosetta usage awareness is active, the device displays a pop-up dialog to the user when launching an app that uses Rosetta. The pop-up dialog indicates that Rosetta will be removed in a future version of the operating system so that the user can contact the app vendor regarding a replacement for the current app.",
           "title": "Allowrosettausageawareness",
           "type": "boolean"
         },
@@ -7092,7 +7125,7 @@
         },
         "allowSafariSummary": {
           "default": true,
-          "description": "If `false`, the system disables the ability to summarize content in Safari.",
+          "description": "If `false`, the system disables the ability to summarize content in Safari.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowsafarisummary",
           "type": "boolean"
         },
@@ -7120,9 +7153,15 @@
           "title": "Allowsharedstream",
           "type": "boolean"
         },
+        "allowSiriAI": {
+          "default": true,
+          "description": "If `false`, the system disables Apple Intelligence integration in Siri.\n\nDeprecated: use the declarative management `com.apple.configuration.siri.settings` configuration.",
+          "title": "Allowsiriai",
+          "type": "boolean"
+        },
         "allowSpellCheck": {
           "default": true,
-          "description": "If `false`, the system disables the keyboard spell checker.",
+          "description": "If `false`, the system disables the keyboard spell checker.\n\nDeprecated: use the declarative management `com.apple.configuration.keyboard.settings` configuration.",
           "title": "Allowspellcheck",
           "type": "boolean"
         },
@@ -7146,7 +7185,7 @@
         },
         "allowTimeMachineBackup": {
           "default": true,
-          "description": "If `false`, the system prevents modification of Time Machine settings in System Settings. This restriction is not supported on the user channel.",
+          "description": "If `false`, the system prevents modification of Time Machine settings in System Settings. This restriction isn't supported on the user channel.",
           "title": "Allowtimemachinebackup",
           "type": "boolean"
         },
@@ -7188,7 +7227,7 @@
         },
         "allowUSBRestrictedMode": {
           "default": true,
-          "description": "If `false`, the system allows iOS devices to always connect to USB accessories while locked. In macOS, allows new USB and Thunderbolt accessories, and SD cards to connect without authorization. If the system has Lockdown mode enabled, it ignores this value. This restriction is not supported on the user channel.",
+          "description": "If `false`, the system allows iOS devices to always connect to USB accessories while locked. In macOS, allows new USB and Thunderbolt accessories, and SD cards to connect without authorization. If the system has Lockdown mode enabled, it ignores this value. This restriction isn't supported on the user channel.",
           "title": "Allowusbrestrictedmode",
           "type": "boolean"
         },
@@ -7206,7 +7245,7 @@
         },
         "allowVisualIntelligenceSummary": {
           "default": true,
-          "description": "If `false`, the system disables visual intelligence summarization.",
+          "description": "If `false`, the system disables visual intelligence summarization.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowvisualintelligencesummary",
           "type": "boolean"
         },
@@ -7236,7 +7275,7 @@
         },
         "allowWritingTools": {
           "default": true,
-          "description": "If `false`, disables Apple Intelligence writing tools.",
+          "description": "If `false`, disables Apple Intelligence writing tools.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Allowwritingtools",
           "type": "boolean"
         },
@@ -7249,14 +7288,14 @@
         },
         "blacklistedAppBundleIDs": {
           "default": null,
-          "description": "Use `blockedAppBundleIDs` instead.",
+          "description": "Deprecated: use the declarative management `com.apple.configuration.app.settings` configuration.",
           "items": {},
           "title": "Blacklistedappbundleids",
           "type": "array"
         },
         "blockedAppBundleIDs": {
           "default": null,
-          "description": "If present, the system prevents showing or launching apps with bundle IDs in the array. Include the value `com.apple.webapp` to restrict all webclips. This applies to App Store apps, marketplace apps, and locally installed apps (using Configurator, Xcode, and so forth).\n\n> Note:\n> Denying system apps may disable other functionality. For example, denying the App Store app may prevent users from accepting the terms and conditions for the user-based Volume Purchase Program (VPP).",
+          "description": "If present, the system prevents showing or launching apps with bundle IDs in the array. Include the value `com.apple.webapp` to restrict all webclips. This applies to App Store apps, marketplace apps, and locally installed apps (using Configurator, Xcode, and so forth).\n\nDeprecated: use the declarative management `com.apple.configuration.app.settings` configuration.\n\n> Note:\n> Denying system apps may disable other functionality. For example, denying the App Store app may prevent users from accepting the terms and conditions for the user-based Volume Purchase Program (VPP).",
           "items": {},
           "title": "Blockedappbundleids",
           "type": "array"
@@ -7283,25 +7322,25 @@
         },
         "enforcedSoftwareUpdateDelay": {
           "default": 30,
-          "description": "How many days to delay a software update on the device. With this restriction in place, the user doesn't see a software update until the specified number of days after the software update release date. The restrictions `forceDelayedAppSoftwareUpdates` and `forceDelayedSoftwareUpdates` use this value.",
+          "description": "How many days to delay a software update on the device. With this restriction in place, the user doesn't see a software update until the specified number of days after the software update release date. The restrictions `forceDelayedAppSoftwareUpdates` and `forceDelayedSoftwareUpdates` use this value.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Enforcedsoftwareupdatedelay",
           "type": "integer"
         },
         "enforcedSoftwareUpdateMajorOSDeferredInstallDelay": {
           "default": 30,
-          "description": "This restriction allows the administrator to set the number of days to delay a major software upgrade on the device. When this restriction is in place, the user sees a software upgrade only after the specified delay after the release of the software upgrade. This value controls the delay for `forceDelayedMajorSoftwareUpdates`.",
+          "description": "This restriction allows the administrator to set the number of days to delay a major software upgrade on the device. When this restriction is in place, the user sees a software upgrade only after the specified delay after the release of the software upgrade. This value controls the delay for `forceDelayedMajorSoftwareUpdates`.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Enforcedsoftwareupdatemajorosdeferredinstalldelay",
           "type": "integer"
         },
         "enforcedSoftwareUpdateMinorOSDeferredInstallDelay": {
           "default": 30,
-          "description": "This restriction allows the administrator to set the number of days to delay a minor OS software update on the device. When this restriction is in place, the user sees a software update only after the specified delay after the release of the software update. This value controls the delay for `forceDelayedSoftwareUpdates`.",
+          "description": "This restriction allows the administrator to set the number of days to delay a minor OS software update on the device. When this restriction is in place, the user sees a software update only after the specified delay after the release of the software update. This value controls the delay for `forceDelayedSoftwareUpdates`.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Enforcedsoftwareupdateminorosdeferredinstalldelay",
           "type": "integer"
         },
         "enforcedSoftwareUpdateNonOSDeferredInstallDelay": {
           "default": 30,
-          "description": "This restriction allows the administrator to set the number of days to delay an app software update on the device. When this restriction is in place, the user sees a non-OS software update only after the specified delay after the release of the software. This value controls the delay for `forceDelayedAppSoftwareUpdates`.",
+          "description": "This restriction allows the administrator to set the number of days to delay an app software update on the device. When this restriction is in place, the user sees a non-OS software update only after the specified delay after the release of the software. This value controls the delay for `forceDelayedAppSoftwareUpdates`.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Enforcedsoftwareupdatenonosdeferredinstalldelay",
           "type": "integer"
         },
@@ -7331,7 +7370,7 @@
         },
         "forceAssistantProfanityFilter": {
           "default": false,
-          "description": "If `true`, the system forces the use of the profanity filter for Siri and dictation. Requires a supervised device in iOS.",
+          "description": "If `true`, the system forces the use of the profanity filter for Siri and dictation. Requires a supervised device in iOS.\n\nDeprecated: use the declarative management `com.apple.configuration.siri.settings` configuration.",
           "title": "Forceassistantprofanityfilter",
           "type": "boolean"
         },
@@ -7385,13 +7424,13 @@
         },
         "forceDelayedMajorSoftwareUpdates": {
           "default": false,
-          "description": "If `true`, the system delays user visibility of major OS updates.",
+          "description": "If `true`, the system delays user visibility of major OS updates.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Forcedelayedmajorsoftwareupdates",
           "type": "boolean"
         },
         "forceDelayedSoftwareUpdates": {
           "default": false,
-          "description": "If `true`, the system delays user visibility of software updates. In macOS, the system allows seed build updates without delay. The delay is 30 days unless you set `enforcedSoftwareUpdateDelay` to another value.",
+          "description": "If `true`, the system delays user visibility of software updates. In macOS, the system allows seed build updates without delay. The delay is 30 days unless you set `enforcedSoftwareUpdateDelay` to another value.\n\nRemoved: use the declarative management `com.apple.configuration.softwareupdate.settings` configuration.",
           "title": "Forcedelayedsoftwareupdates",
           "type": "boolean"
         },
@@ -7415,13 +7454,13 @@
         },
         "forceOnDeviceOnlyDictation": {
           "default": false,
-          "description": "If `true`, the system disables connections to Siri servers for the purposes of dictation.",
+          "description": "If `true`, the system disables connections to Siri servers for the purposes of dictation.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Forceondeviceonlydictation",
           "type": "boolean"
         },
         "forceOnDeviceOnlyTranslation": {
           "default": false,
-          "description": "If `true`, the device can't connect to Siri servers for the purposes of translation.",
+          "description": "If `true`, the device can't connect to Siri servers for the purposes of translation.\n\nDeprecated: use the declarative management `com.apple.configuration.intelligence.settings` configuration.",
           "title": "Forceondeviceonlytranslation",
           "type": "boolean"
         },
@@ -7488,7 +7527,7 @@
         },
         "requireManagedPasteboard": {
           "default": false,
-          "description": "If `true`, copy-and-paste functionality is limited by the `allowOpenFromManagedToUnmanaged` and `allowOpenFromUnmanagedToManaged` restrictions.",
+          "description": "If `true`, the `allowOpenFromManagedToUnmanaged` and `allowOpenFromUnmanagedToManaged` restrictions also limit copy-and-paste functionality.",
           "title": "Requiremanagedpasteboard",
           "type": "boolean"
         },
@@ -7524,7 +7563,7 @@
         },
         "whitelistedAppBundleIDs": {
           "default": null,
-          "description": "Use `allowListedAppBundleIDs` instead.",
+          "description": "Deprecated: use the declarative management `com.apple.configuration.app.settings` configuration.",
           "items": {},
           "title": "Whitelistedappbundleids",
           "type": "array"
@@ -7598,13 +7637,13 @@
         },
         "askForPassword": {
           "default": false,
-          "description": "If `true`, the user is prompted for a password when the screen saver is unlocked or stopped. When you use this prompt, you must also provide `askForPasswordDelay`. Available in macOS 10.13 and later.",
+          "description": "If `true`, the device prompts the user for a password when the screen saver is unlocked or stopped. When you use this prompt, you must also provide `askForPasswordDelay`.",
           "title": "Askforpassword",
           "type": "boolean"
         },
         "askForPasswordDelay": {
           "default": null,
-          "description": "The number of seconds to delay before the password will be required to unlock or stop the screen saver (the grace period). A value of `2147483647` (for example, `0x7FFFFFFF`) disables this requirement. To use this option, you must set `askForPassword` to `true`. Available in macOS 10.13 and later.",
+          "description": "The number of seconds to delay before the device requires a password to unlock or stop the screen saver (the grace period). A value of `2147483647` (hexadecimal equivalent of `0x7FFFFFFF`) disables this requirement, and a value of `0` immediately requires the password. To use this option, you must set `askForPassword` to `true`.",
           "title": "Askforpassworddelay",
           "type": "integer"
         },
@@ -7845,7 +7884,7 @@
         },
         "SkipSetupItems": {
           "default": null,
-          "description": "An array of strings that describe the setup items to skip. `SkipKeys` provides a list of valid strings and their meanings. Available in iOS 14 and later, and macOS 15 and later.",
+          "description": "An array of strings that describe the setup items to skip. `SkipKeys` provides a list of valid strings and their meanings.",
           "items": {},
           "title": "Skipsetupitems",
           "type": "array"
@@ -7901,7 +7940,7 @@
         },
         "SHKDeniedShareServices": {
           "default": null,
-          "description": "The list of plugin IDs that won't show up in the user's Share menu. This key is used only if there is no `SHKAllowedShareServices` key.",
+          "description": "The list of plugin IDs that won't show up in the user's Share menu. This key is used only if there's no `SHKAllowedShareServices` key.",
           "items": {},
           "title": "Shkdeniedshareservices",
           "type": "array"
@@ -7987,13 +8026,13 @@
         },
         "allowSmartCard": {
           "default": true,
-          "description": "If `false`, the system disables smart cards for logins, authorizations, and screen saver unlocking. It is still allowed for other functions, such as signing emails and accessing the web. A restart is required for a setting change to take effect.",
+          "description": "If `false`, the system disables smart cards for logins, authorizations, and screen saver unlocking. It's still allowed for other functions, such as signing emails and accessing the web. The device requires a restart for a setting change to take effect.",
           "title": "Allowsmartcard",
           "type": "boolean"
         },
         "checkCertificateTrust": {
           "default": 0,
-          "description": "Configures the certificate trust check and has one of the following possible values:\n\n- `0`: Turns off certificate trust check.\n- `1`: Turns on certificate trust check. A standard validity check is performed but doesn't include additional revocation checks.\n- `2`: Turns on certificate trust check. A soft revocation check is also performed. Until the certificate is explicitly rejected by CRL/OCSP, it's considered valid. This setting means that unavailable or unreachable CRL/OCSP allow this check to succeed.\n- `3`: Turns on certificate trust check. A hard revocation check is also performed. Unless CRL/OCSP explicitly says \"This certificate is OK,\" it's considered invalid. This option is the most secure.",
+          "description": "Configures the certificate trust check and has one of the following possible values:\n\n- `0`: Turns off certificate trust check.\n- `1`: Turns on certificate trust check. The device performs a standard validity check but doesn't include additional revocation checks.\n- `2`: Turns on certificate trust check. The device also performs a soft revocation check. Until CRL/OCSP explicitly rejects the certificate, the device considers it valid. This setting means that unavailable or unreachable CRL/OCSP allow this check to succeed.\n- `3`: Turns on certificate trust check. The device also performs a hard revocation check. Unless CRL/OCSP explicitly says \"This certificate is OK,\" the device considers it invalid. This option is the most secure.",
           "title": "Checkcertificatetrust",
           "type": "integer"
         },
@@ -8005,13 +8044,13 @@
         },
         "tokenRemovalAction": {
           "default": 0,
-          "description": "If `1`, the system enables the screen saver when the smart card is removed. Available in macOS 10.13.4 and later.",
+          "description": "If `1`, the device enables the screen saver when the user removes the smart card.",
           "title": "Tokenremovalaction",
           "type": "integer"
         },
         "enforceSmartCard": {
           "default": false,
-          "description": "If `true`, a user can only log in or authenticate with a smart card. Available in macOS 10.13.2 and later.",
+          "description": "If `true`, a user can only log in or authenticate with a smart card.",
           "title": "Enforcesmartcard",
           "type": "boolean"
         },
@@ -8047,7 +8086,7 @@
         },
         "CatalogURL": {
           "default": null,
-          "description": "The URL of the software update catalog. This property is not supported in macOS 11 and later.",
+          "description": "The URL of the software update catalog. This property isn't supported in macOS 11 and later.",
           "title": "Catalogurl",
           "type": "string"
         },
@@ -8161,7 +8200,7 @@
         },
         "VPNUUID": {
           "default": null,
-          "description": "The VPNUUID of the per-app VPN the account uses for network communication. Available in iOS 14 and later.",
+          "description": "The VPNUUID of the per-app VPN the account uses for network communication.",
           "title": "Vpnuuid",
           "type": "string"
         },
@@ -8225,7 +8264,7 @@
         "RemovableSystemExtensions": {
           "additionalProperties": true,
           "default": null,
-          "description": "A dictionary of system extensions that are allowed to remove themselves from the machine. The dictionary maps team identifiers (keys) to arrays of bundle identifiers, where the bundle identifier defines the system extension. An application using the `OSSystemExtensionDeactivationRequest` API can deactivate the specified system extensions without requiring an administrator to authorize the operation.\n\nAvailable in macOS 12 and later.",
+          "description": "A dictionary of system extensions that are allowed to remove themselves from the machine. The dictionary maps team identifiers (keys) to arrays of bundle identifiers, where the bundle identifier defines the system extension. An application using the `OSSystemExtensionDeactivationRequest` API can deactivate the specified system extensions without requiring an administrator to authorize the operation.",
           "title": "Removablesystemextensions",
           "type": "object"
         },
@@ -8239,7 +8278,7 @@
         "NonRemovableFromUISystemExtensions": {
           "additionalProperties": true,
           "default": null,
-          "description": "A dictionary of system extensions on the computer. The dictionary maps the team identifiers (keys) to arrays of bundle identifiers, where the bundle identifier defines the system extension which can't be disabled or uninstalled from System Settings or Finder. The set of system extensions between `RemovableSystemExtensions` and `NonRemovableFromUISystemExtensions` can to overlap.",
+          "description": "A dictionary of system extensions on the computer. The dictionary maps the team identifiers (keys) to arrays of bundle identifiers, where the bundle identifier defines the system extension which can't be disabled or uninstalled from System Settings or Finder. The set of system extensions between `RemovableSystemExtensions` and `NonRemovableFromUISystemExtensions` can't overlap.",
           "title": "Nonremovablefromuisystemextensions",
           "type": "object"
         },
@@ -8272,13 +8311,6 @@
         "PayloadVersion": {
           "title": "Payloadversion",
           "type": "integer"
-        },
-        "Processes": {
-          "additionalProperties": true,
-          "default": null,
-          "description": "Not to be used.",
-          "title": "Processes",
-          "type": "object"
         },
         "Subsystems": {
           "additionalProperties": true,
@@ -8363,7 +8395,7 @@
         },
         "AllowNonAdminUserApprovals": {
           "default": false,
-          "description": "If `true`, nonadministrative users can approve additional kernel extensions in the Security & Privacy preferences.\n\nAvailable in macOS 11 and later.",
+          "description": "If `true`, nonadministrative users can approve additional kernel extensions in the Security & Privacy preferences.",
           "title": "Allownonadminuserapprovals",
           "type": "boolean"
         },
@@ -8509,7 +8541,7 @@
         },
         "Comment": {
           "default": null,
-          "description": "This string appears in the System Policy UI. If it's missing, `PayloadDisplayName` or `PayloadDescription` is entered into this field before the rule is added to the System Policy database.",
+          "description": "This string appears in the System Policy UI. If it's missing, the device enters `PayloadDisplayName` or `PayloadDescription` into this field before adding the rule to the System Policy database.",
           "title": "Comment",
           "type": "string"
         },
@@ -8533,7 +8565,7 @@
         },
         "LeafCertificate": {
           "default": null,
-          "description": "The single leaf certificate for the app that is in the allow list.",
+          "description": "The single leaf certificate for the app that's in the allow list.",
           "title": "Leafcertificate",
           "type": "string"
         },
@@ -8583,7 +8615,7 @@
         },
         "DisabledSystemSettings": {
           "default": null,
-          "description": "The list of disabled System Settings extensions. All other items will be enabled. When `DisabledSystemSettings` is specified, the device ignores `DisabledPreferencePanes` and `EnabledPreferencePanes`.\n\n> Note:\n> A given System Settings extension can supply more than one section in System Settings; disabling such an extension disables all sections it supplies.",
+          "description": "The list of disabled System Settings extensions. The device enables all other items. When you specify `DisabledSystemSettings`, the device ignores `DisabledPreferencePanes` and `EnabledPreferencePanes`.\n\n> Note:\n> A given System Settings extension can supply more than one section in System Settings; disabling such an extension disables all sections it supplies.",
           "items": {},
           "title": "Disabledsystemsettings",
           "type": "array"
@@ -8780,7 +8812,7 @@
         },
         "VPNType": {
           "default": null,
-          "description": "The type of the VPN, which defines which settings are appropriate for this VPN payload.\n\nIf the type is `VPN` or `TransparentProxy`, then the system requires a value for `VPNSubType`.\n\n`TransparentProxy` is only available in macOS. `L2TP` and `IPSec` aren't available in tvOS. `AlwaysOn` is only available on iOS and Apple Watch pairing isn't supported with `AlwaysOn`. For a previously paired Apple Watch, all phone-watch communications cease when `AlwaysOn` is enabled. Not available in watchOS.",
+          "description": "The type of the VPN, which defines which settings are appropriate for this VPN payload.\n\nIf the type is `VPN` or `TransparentProxy`, then the system requires a value for `VPNSubType`.\n\n`TransparentProxy` is only available in macOS. `L2TP` and `IPSec` aren't available in tvOS. `AlwaysOn` is only available on iOS and `AlwaysOn` doesn't support Apple Watch pairing. For a previously paired Apple Watch, all phone-watch communications cease when `AlwaysOn` is enabled. Not available in watchOS.",
           "title": "Vpntype",
           "type": "string"
         },
@@ -8862,7 +8894,7 @@
         "TransparentProxy": {
           "additionalProperties": true,
           "default": null,
-          "description": "The dictionary to use when `VPNType` is `TransparentProxy`. Available in macOS 14 and later.",
+          "description": "The dictionary to use when `VPNType` is `TransparentProxy`.",
           "title": "Transparentproxy",
           "type": "object"
         },
@@ -8934,13 +8966,13 @@
         },
         "IgnoreManifestScope": {
           "default": false,
-          "description": "If `true`, a full screen web clip can navigate to an external web site without showing Safari UI. Otherwise, Safari UI appears when navigating away from the web clip's URL. This key has no effect when `FullScreen` is `false`. Available in iOS 14 and later.",
+          "description": "If `true`, a full screen web clip can navigate to an external web site without showing Safari UI. Otherwise, Safari UI appears when navigating away from the web clip's URL. This key has no effect when `FullScreen` is `false`.",
           "title": "Ignoremanifestscope",
           "type": "boolean"
         },
         "TargetApplicationBundleIdentifier": {
           "default": null,
-          "description": "The application bundle identifier of the application that opens the URL. To use this property, install the profile through MDM. Available in iOS 14 and later.",
+          "description": "The application bundle identifier of the application that opens the URL. To use this property, install the profile through MDM.",
           "title": "Targetapplicationbundleidentifier",
           "type": "string"
         },
@@ -9138,14 +9170,14 @@
         },
         "FilterURLs": {
           "default": false,
-          "description": "If `true`, the system filters URL requests. Use when `FilterType` is `Plugin`. Available in iOS 26 and macOS 26, and later.",
+          "description": "If `true`, the system filters URL requests. Use when `FilterType` is `Plugin`.",
           "title": "Filterurls",
           "type": "boolean"
         },
         "URLFilterParameters": {
           "additionalProperties": true,
           "default": null,
-          "description": "A dictionary containing URL filter parameters. Required when `FilterURLs` is `true`. Available in iOS 26 and macOS 26 and later.",
+          "description": "A dictionary containing URL filter parameters. Required when `FilterURLs` is `true`.",
           "title": "Urlfilterparameters",
           "type": "object"
         },
@@ -9355,7 +9387,7 @@
         },
         "AllowJoinBeforeFirstUnlock": {
           "default": false,
-          "description": "If `true`, the device makes this network available for joining before the device is unlocked for the first time following a reboot, on a device configured for return to service. Any network credentials are placed into Class D storage within the keychain, and information about the network is stored on disk in Class D.\n\nThere are several restrictions on the use of this flag:\n\n- This property is only available in the return to service mode.\n- Only one network can be designated as available before first unlock.\n- `EAPClientConfiguration` must not be present.\n- If `IsHotspot` is present, it must be set to `false`.\n- `QoSMarkingPolicy` must not be present.\n- If `ProxyType` is present, it must be set to `None`.\n\nThe device fails to install the profile payload if any of these conditions are not met.",
+          "description": "If `true`, the device makes this network available for joining before the device is unlocked for the first time following a reboot, on a device configured for return to service. The device places any network credentials into Class D storage within the keychain and stores information about the network on disk in Class D.\n\nThere are several restrictions on the use of this flag:\n\n- This property is only available in the return to service mode.\n- You can designate only one network as available before first unlock.\n- `EAPClientConfiguration` must not be present.\n- If `IsHotspot` is present, it must be set to `false`.\n- `QoSMarkingPolicy` must not be present.\n- If `ProxyType` is present, it must be set to `None`.\n\nThe device fails to install the profile payload if any of these conditions aren't met.",
           "title": "Allowjoinbeforefirstunlock",
           "type": "boolean"
         },
@@ -9411,7 +9443,7 @@
         },
         "sanAuthMethod": {
           "default": null,
-          "description": "The authentication method for the SAN. This key is required for all Xsan SANs. It's optional for StorNext SANs but should be set if the StorNext SAN uses an `auth_secret` file.\n\n\n\nOnly one value is accepted: `auth_secret`",
+          "description": "The authentication method for the SAN. This key is required for all Xsan SANs. It's optional for StorNext SANs but should be set if the StorNext SAN uses an `auth_secret` file.\n\n\n\nThe SAN accepts only one value: `auth_secret`",
           "title": "Sanauthmethod",
           "type": "string"
         },
@@ -9596,7 +9628,7 @@
           "mapping": {
             "com.apple.ADCertificate.managed": "#/$defs/Active_Directory_Certificate",
             "com.apple.AIM.account": "#/$defs/AIM_Account",
-            "com.apple.AssetCache.managed": "#/$defs/Content_Caching",
+            "com.apple.AssetCache.managed": "#/$defs/Content_Caching_Service",
             "com.apple.Dictionary": "#/$defs/Parental_Controls__Dictionary",
             "com.apple.DirectoryService.managed": "#/$defs/Directory_Service",
             "com.apple.DiscRecording": "#/$defs/Media_Management__Disc_Burning",
@@ -9846,7 +9878,7 @@
             "$ref": "#/$defs/Managed_Preferences"
           },
           {
-            "$ref": "#/$defs/Content_Caching"
+            "$ref": "#/$defs/Content_Caching_Service"
           },
           {
             "$ref": "#/$defs/Associated_Domains"

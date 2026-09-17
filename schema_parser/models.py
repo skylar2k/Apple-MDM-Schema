@@ -124,3 +124,4 @@ class SchemaDocument(SchemaModel):
         PayloadKey
     ]  # A list of YAML objects representing the command request
     notes: object | None = None
+    examples: object | None = None
