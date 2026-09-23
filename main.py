@@ -5,31 +5,19 @@ import pathlib
 from devtools import pprint
 from pydantic import BaseModel
 from schema_parser import (
-    parse_schema,
     SchemaDocument,
-    # ProfileJsonSchema,
     model_from_payload_keys,
+    load_schema,
+    make_configuration_profile,
 )
-from schema_parser.json_schema import make_configuration_profile
 
 APPLE_SCHEMA_PATH: pathlib.Path = pathlib.Path("./device-management/mdm/profiles")
 
 
 def main():
-    profiles: dict[str, SchemaDocument] = {}
-    for file in APPLE_SCHEMA_PATH.rglob("*.yaml"):
-        with open(file) as f:
-            profile = parse_schema(f.read())
-            if profile.payload.payloadtype in [
-                "TopLevel",
-                "CommonPayloadKeys",
-                ".GlobalPreferences",
-            ]:
-                continue
-            profiles[profile.payload.payloadtype] = profile
+    profiles: dict[str, SchemaDocument] = load_schema(APPLE_SCHEMA_PATH.rglob("*.yaml"))
 
     payload_registry: dict[str, type[BaseModel]] = {}
-
     for profile in profiles:
         if profile in ["TopLevel", "CommonPayloadKeys", ".GlobalPreferences"]:
             continue

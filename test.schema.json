@@ -9612,6 +9612,10 @@
       "title": "Payloadidentifier",
       "type": "string"
     },
+    "PayloadUUID": {
+      "title": "Payloaduuid",
+      "type": "string"
+    },
     "PayloadVersion": {
       "title": "Payloadversion",
       "type": "integer"
@@ -10110,7 +10114,7 @@
   },
   "required": [
     "PayloadIdentifier",
-    "PayloadIdentifier",
+    "PayloadUUID",
     "PayloadVersion",
     "PayloadContent"
   ],

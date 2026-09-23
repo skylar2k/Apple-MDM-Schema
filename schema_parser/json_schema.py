@@ -121,7 +121,7 @@ def make_configuration_profile(payloads: dict[str, type[BaseModel]]):
             Field(default=None, alias="PayloadDisplayName"),
         ),
         PayloadIdentifier=(str, Field(alias="PayloadIdentifier")),
-        PayloadUUID=(str, Field(alias="PayloadIdentifier")),
+        PayloadUUID=(str, Field(alias="PayloadUUID")),
         PayloadVersion=(int, Field(alias="PayloadVersion")),
         PayloadType=(
             Literal["Configuration"],
@@ -132,3 +132,6 @@ def make_configuration_profile(payloads: dict[str, type[BaseModel]]):
         ),
         PayloadContent=(list[payload_union], Field(alias="PayloadContent")),
     )
+
+
+def create_schema(payloads: dict[str, type[BaseModel]]): ...
