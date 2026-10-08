@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=./profile.schema.json
+PayloadDisplayName: UiB Apps - Munkireport - Servicemanagement
+PayloadIdentifier: no.uib.profiles.apps.munkireport.servicemanagement
+PayloadUUID: 2d5fa223-1183-5425-a3a7-ef763668d5dd
+PayloadOrganization: Universitetet i Bergen
+PayloadType: Configuration
+PayloadVersion: 1
+PayloadContent:
+  - PayloadType: 'com.apple.servicemanagement'
+    PayloadIdentifier: no.uib.profiles.apps.munkireport.servicemanagement.main
+    PayloadUUID: 9aaf33be-eba1-5392-9827-fe91a10278c5
+    PayloadVersion: 1
+    Rules:
+      - RuleType: Label
+        RuleValue: com.github.munkireport.runner
+  # Not defined by Apple: only the common payload keys are checked.
+  - PayloadType: no.uib.custom
+    PayloadIdentifier: no.uib.profiles.custom.main
+    PayloadUUID: 0b1c2d3e-0000-4000-8000-000000000001
+    PayloadVersion: 1
+    Anything: goes

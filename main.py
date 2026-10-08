@@ -1,41 +1,31 @@
 #!/usr/bin/env python
+"""Generate a single JSON Schema for configuration profiles (as YAML or JSON)
+from the schemas in apple/device-management."""
 
+import argparse
 import json
 import pathlib
-from devtools import pprint
-from pydantic import BaseModel
-from schema_parser import (
-    SchemaDocument,
-    model_from_payload_keys,
-    load_schema,
-    make_configuration_profile,
-)
 
-APPLE_SCHEMA_PATH: pathlib.Path = pathlib.Path("./device-management/mdm/profiles")
+from schema_parser import convert, load_profiles
+
+DEFAULT_SOURCE = pathlib.Path("device-management/mdm/profiles")
 
 
-def main():
-    profiles: dict[str, SchemaDocument] = load_schema(APPLE_SCHEMA_PATH.rglob("*.yaml"))
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source", type=pathlib.Path, default=DEFAULT_SOURCE)
+    parser.add_argument("-o", "--output", type=pathlib.Path, default="profile.schema.json")
+    parser.add_argument(
+        "--lax",
+        action="store_true",
+        help="allow keys Apple's schema doesn't list (default: reject them, to catch typos)",
+    )
+    args = parser.parse_args()
 
-    payload_registry: dict[str, type[BaseModel]] = {}
-    for profile in profiles:
-        if profile in ["TopLevel", "CommonPayloadKeys", ".GlobalPreferences"]:
-            continue
-
-        schema = profiles[profile]
-        payload_keys = model_from_payload_keys(
-            schema.payloadkeys,
-            payload_type=profile,
-            model_name=schema.title,
-        )
-        payload_registry[profile] = payload_keys
-
-    test = make_configuration_profile(payload_registry)
-    with open("test.schema.json", "w") as f:
-        json.dump(
-            test.model_json_schema(True, ref_template="#/$defs/{model}"), f, indent=2
-        )
-    pprint(test.model_json_schema(True, ref_template="#/$defs/{model}"))
+    top_level, common, payloads = load_profiles(args.source.glob("*.yaml"))
+    schema = convert(top_level, common, payloads, strict=not args.lax)
+    args.output.write_text(json.dumps(schema, indent=2, ensure_ascii=False) + "\n")
+    print(f"{args.output}: {len(payloads)} Apple payload types")
 
 
 if __name__ == "__main__":

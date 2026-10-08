@@ -1,0 +1,16 @@
+[project]
+name = "apple-mdm-schema-gen"
+version = "0.1.0"
+description = "Generate one JSON Schema for configuration profiles from apple/device-management"
+requires-python = ">=3.12"
+dependencies = ["ruamel.yaml>=0.18"]
+
+[dependency-groups]
+dev = ["jsonschema>=4", "pytest>=8"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
