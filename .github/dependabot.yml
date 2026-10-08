@@ -1,0 +1,11 @@
+version: 2
+updates:
+  # Keeps the device-management submodule (used for local development) current.
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

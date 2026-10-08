@@ -1,0 +1,92 @@
+name: Generate schemas
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 5 * * *" # daily: picks up upstream changes and new seed branches
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.refs.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: refs
+        run: |
+          matrix=$(git ls-remote --heads https://github.com/apple/device-management.git | python3 scripts/discover_refs.py)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "$matrix"
+
+  build:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # a broken seed branch must not block the others
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: apple/device-management
+          ref: ${{ matrix.ref }}
+          path: upstream
+      - uses: astral-sh/setup-uv@v6
+      - name: Test
+        run: uv run pytest
+        env:
+          MDM_PROFILES: ${{ github.workspace }}/upstream/mdm/profiles
+      - name: Generate
+        run: |
+          sha=$(git -C upstream rev-parse HEAD)
+          mkdir out
+          uv run main.py --source upstream/mdm/profiles -o "out/${{ matrix.name }}.schema.json" \
+            --comment "apple/device-management@${{ matrix.ref }} ${sha}"
+          if [ -n "${{ matrix.alias }}" ]; then
+            cp "out/${{ matrix.name }}.schema.json" "out/${{ matrix.alias }}.schema.json"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: schema-${{ matrix.name }}
+          path: out/
+
+  publish:
+    needs: build
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: schema-*
+          path: site
+          merge-multiple: true
+      - name: Require the release schema
+        # Seed branches may fail and be skipped; a site without `release` must not go live.
+        run: test -f site/release.schema.json
+      - name: Index
+        run: |
+          {
+            echo "<!doctype html><meta charset=utf-8><title>Apple MDM profile schemas</title><h1>Apple MDM profile schemas</h1><ul>"
+            for f in site/*.schema.json; do n=$(basename "$f"); echo "<li><a href=\"$n\">$n</a></li>"; done
+            echo "</ul>"
+          } > site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4
