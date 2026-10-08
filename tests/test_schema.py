@@ -1,4 +1,5 @@
 import copy
+import os
 import pathlib
 
 import pytest
@@ -7,7 +8,11 @@ from jsonschema import Draft7Validator
 
 from schema_parser import convert, load_profiles
 
-SOURCE = pathlib.Path(__file__).parent.parent / "device-management/mdm/profiles"
+# CI points this at a checkout of whichever upstream branch is being built.
+SOURCE = pathlib.Path(
+    os.environ.get("MDM_PROFILES")
+    or pathlib.Path(__file__).parent.parent / "device-management/mdm/profiles"
+)
 pytestmark = pytest.mark.skipif(not SOURCE.is_dir(), reason="submodule not checked out")
 
 MUNKI = """

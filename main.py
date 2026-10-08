@@ -20,10 +20,13 @@ def main() -> None:
         action="store_true",
         help="allow keys Apple's schema doesn't list (default: reject them, to catch typos)",
     )
+    parser.add_argument("--comment", help="provenance note stored in the schema's $comment")
     args = parser.parse_args()
 
     top_level, common, payloads = load_profiles(args.source.glob("*.yaml"))
     schema = convert(top_level, common, payloads, strict=not args.lax)
+    if args.comment:
+        schema["$comment"] = args.comment
     args.output.write_text(json.dumps(schema, indent=2, ensure_ascii=False) + "\n")
     print(f"{args.output}: {len(payloads)} Apple payload types")
 
