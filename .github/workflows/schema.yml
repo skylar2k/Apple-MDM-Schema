@@ -20,7 +20,7 @@ jobs:
     outputs:
       matrix: ${{ steps.refs.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: refs
         run: |
           matrix=$(git ls-remote --heads https://github.com/apple/device-management.git | python3 scripts/discover_refs.py)
@@ -34,8 +34,8 @@ jobs:
       fail-fast: false # a broken seed branch must not block the others
       matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: apple/device-management
           ref: ${{ matrix.ref }}
