@@ -85,7 +85,7 @@ jobs:
             for f in site/*.schema.json; do n=$(basename "$f"); echo "<li><a href=\"$n\">$n</a></li>"; done
             echo "</ul>"
           } > site/index.html
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
       - id: deploy
