@@ -54,7 +54,7 @@ jobs:
           if [ -n "${{ matrix.alias }}" ]; then
             cp "out/${{ matrix.name }}.schema.json" "out/${{ matrix.alias }}.schema.json"
           fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: schema-${{ matrix.name }}
           path: out/
